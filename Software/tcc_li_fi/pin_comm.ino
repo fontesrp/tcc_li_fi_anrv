@@ -19,7 +19,7 @@ void send10b(unsigned int data) {
 	// interrupts();
 }
 
-unsigned int receive10b(unsigned char pinNumber) {
+unsigned int receive10b() {
 
 	unsigned char i;
 	unsigned int data = 0u;
@@ -28,7 +28,7 @@ unsigned int receive10b(unsigned char pinNumber) {
 	// noInterrupts();
 
 	for (i = 0u; i < DATA_BIT_SIZE; i++) {
-		pinState = digitalRead(pinNumber);
+		pinState = digitalRead(INPUT_PIN);
 		data = (data << 1) | (pinState == LOW ? 0u : 1u);
 		delayMicroseconds(microBitDelay);
 		delay(milliBitDelay);
@@ -85,4 +85,9 @@ void setBitDelay() {
 		microBitDelay = 0u;
 		milliBitDelay = (desiredBitTime - minimumBitTime) / 1000u; // Converts to milliseconds
 	}
+}
+
+void setupPins() {
+	pinMode(OUTPUT_PIN, OUTPUT);
+	pinMode(INPUT_PIN, INPUT);
 }
