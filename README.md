@@ -4,3 +4,5 @@ Graduating project (TCC), Electrical Engineering, FEI
 Integrants: Alex Härter, Nilton Brenner, Rodrigo Fontes and Victor Iaremchuc
 
 The project's goal is to use two Arduinos to create a unidirectional Li-Fi network. We will follow, as closely as possible, IEEE's 802.15.7-2011 standard.
+
+The standard can be found at https://standards.ieee.org/findstds/standard/802.15.7-2011.html
