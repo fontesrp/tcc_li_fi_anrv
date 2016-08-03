@@ -1,291 +1,1864 @@
-#include "encoding_8b10b.h"
-
-unsigned int encode8B10B(unsigned char data) {
-
-	unsigned char rdSignal;
-
-	// Decide which sub-index to use
-	rdSignal = (rd < 0 ? 0 : 1);
-
-	// Update rd's signal
-	rd *= searchTable[data][2];
-
-	// The main index is the 8 bit data itself
-	return searchTable[data][rdSignal];
-}
+#include "encode.h"
 
 void setup8B10B() {
 
 	// rd must be always initilized as negative
 	rd = -1;
+}
 
-	if (!tableInitialized) {
-		createSearchTable();
-		tableInitialized = 1;
+unsigned int encode8B10B(unsigned char data) {
+
+	switch (data) {
+		case 0u:
+			return (rd < 0 ? 628u : 395u);
+			break;
+		case 1u:
+			return (rd < 0 ? 468u : 555u);
+			break;
+		case 2u:
+			return (rd < 0 ? 724u : 299u);
+			break;
+		case 3u:
+			rd *= -1;
+			return (rd > 0 ? 795u : 788u);
+			break;
+		case 4u:
+			return (rd < 0 ? 852u : 171u);
+			break;
+		case 5u:
+			rd *= -1;
+			return (rd > 0 ? 667u : 660u);
+			break;
+		case 6u:
+			rd *= -1;
+			return (rd > 0 ? 411u : 404u);
+			break;
+		case 7u:
+			rd *= -1;
+			return (rd > 0 ? 907u : 116u);
+			break;
+		case 8u:
+			return (rd < 0 ? 916u : 107u);
+			break;
+		case 9u:
+			rd *= -1;
+			return (rd > 0 ? 603u : 596u);
+			break;
+		case 10u:
+			rd *= -1;
+			return (rd > 0 ? 347u : 340u);
+			break;
+		case 11u:
+			rd *= -1;
+			return (rd > 0 ? 843u : 836u);
+			break;
+		case 12u:
+			rd *= -1;
+			return (rd > 0 ? 219u : 212u);
+			break;
+		case 13u:
+			rd *= -1;
+			return (rd > 0 ? 715u : 708u);
+			break;
+		case 14u:
+			rd *= -1;
+			return (rd > 0 ? 459u : 452u);
+			break;
+		case 15u:
+			return (rd < 0 ? 372u : 651u);
+			break;
+		case 16u:
+			return (rd < 0 ? 436u : 587u);
+			break;
+		case 17u:
+			rd *= -1;
+			return (rd > 0 ? 571u : 564u);
+			break;
+		case 18u:
+			rd *= -1;
+			return (rd > 0 ? 315u : 308u);
+			break;
+		case 19u:
+			rd *= -1;
+			return (rd > 0 ? 811u : 804u);
+			break;
+		case 20u:
+			rd *= -1;
+			return (rd > 0 ? 187u : 180u);
+			break;
+		case 21u:
+			rd *= -1;
+			return (rd > 0 ? 683u : 676u);
+			break;
+		case 22u:
+			rd *= -1;
+			return (rd > 0 ? 427u : 420u);
+			break;
+		case 23u:
+			return (rd < 0 ? 932u : 91u);
+			break;
+		case 24u:
+			return (rd < 0 ? 820u : 203u);
+			break;
+		case 25u:
+			rd *= -1;
+			return (rd > 0 ? 619u : 612u);
+			break;
+		case 26u:
+			rd *= -1;
+			return (rd > 0 ? 363u : 356u);
+			break;
+		case 27u:
+			return (rd < 0 ? 868u : 155u);
+			break;
+		case 28u:
+			rd *= -1;
+			return (rd > 0 ? 235u : 228u);
+			break;
+		case 29u:
+			return (rd < 0 ? 740u : 283u);
+			break;
+		case 30u:
+			return (rd < 0 ? 484u : 539u);
+			break;
+		case 31u:
+			return (rd < 0 ? 692u : 331u);
+			break;
+		case 32u:
+			rd *= -1;
+			return (rd > 0 ? 633u : 393u);
+			break;
+		case 33u:
+			rd *= -1;
+			return (rd > 0 ? 473u : 553u);
+			break;
+		case 34u:
+			rd *= -1;
+			return (rd > 0 ? 729u : 297u);
+			break;
+		case 35u:
+			return 793u;
+			break;
+		case 36u:
+			rd *= -1;
+			return (rd > 0 ? 857u : 169u);
+			break;
+		case 37u:
+			return 665u;
+			break;
+		case 38u:
+			return 409u;
+			break;
+		case 39u:
+			return (rd < 0 ? 905u : 121u);
+			break;
+		case 40u:
+			rd *= -1;
+			return (rd > 0 ? 921u : 105u);
+			break;
+		case 41u:
+			return 601u;
+			break;
+		case 42u:
+			return 345u;
+			break;
+		case 43u:
+			return 841u;
+			break;
+		case 44u:
+			return 217u;
+			break;
+		case 45u:
+			return 713u;
+			break;
+		case 46u:
+			return 457u;
+			break;
+		case 47u:
+			rd *= -1;
+			return (rd > 0 ? 377u : 649u);
+			break;
+		case 48u:
+			rd *= -1;
+			return (rd > 0 ? 441u : 585u);
+			break;
+		case 49u:
+			return 569u;
+			break;
+		case 50u:
+			return 313u;
+			break;
+		case 51u:
+			return 809u;
+			break;
+		case 52u:
+			return 185u;
+			break;
+		case 53u:
+			return 681u;
+			break;
+		case 54u:
+			return 425u;
+			break;
+		case 55u:
+			rd *= -1;
+			return (rd > 0 ? 937u : 89u);
+			break;
+		case 56u:
+			rd *= -1;
+			return (rd > 0 ? 825u : 201u);
+			break;
+		case 57u:
+			return 617u;
+			break;
+		case 58u:
+			return 361u;
+			break;
+		case 59u:
+			rd *= -1;
+			return (rd > 0 ? 873u : 153u);
+			break;
+		case 60u:
+			return 233u;
+			break;
+		case 61u:
+			rd *= -1;
+			return (rd > 0 ? 745u : 281u);
+			break;
+		case 62u:
+			rd *= -1;
+			return (rd > 0 ? 489u : 537u);
+			break;
+		case 63u:
+			rd *= -1;
+			return (rd > 0 ? 697u : 329u);
+			break;
+		case 64u:
+			rd *= -1;
+			return (rd > 0 ? 629u : 389u);
+			break;
+		case 65u:
+			rd *= -1;
+			return (rd > 0 ? 469u : 549u);
+			break;
+		case 66u:
+			rd *= -1;
+			return (rd > 0 ? 725u : 293u);
+			break;
+		case 67u:
+			return 789u;
+			break;
+		case 68u:
+			rd *= -1;
+			return (rd > 0 ? 853u : 165u);
+			break;
+		case 69u:
+			return 661u;
+			break;
+		case 70u:
+			return 405u;
+			break;
+		case 71u:
+			return (rd < 0 ? 901u : 117u);
+			break;
+		case 72u:
+			rd *= -1;
+			return (rd > 0 ? 917u : 101u);
+			break;
+		case 73u:
+			return 597u;
+			break;
+		case 74u:
+			return 341u;
+			break;
+		case 75u:
+			return 837u;
+			break;
+		case 76u:
+			return 213u;
+			break;
+		case 77u:
+			return 709u;
+			break;
+		case 78u:
+			return 453u;
+			break;
+		case 79u:
+			rd *= -1;
+			return (rd > 0 ? 373u : 645u);
+			break;
+		case 80u:
+			rd *= -1;
+			return (rd > 0 ? 437u : 581u);
+			break;
+		case 81u:
+			return 565u;
+			break;
+		case 82u:
+			return 309u;
+			break;
+		case 83u:
+			return 805u;
+			break;
+		case 84u:
+			return 181u;
+			break;
+		case 85u:
+			return 677u;
+			break;
+		case 86u:
+			return 421u;
+			break;
+		case 87u:
+			rd *= -1;
+			return (rd > 0 ? 933u : 85u);
+			break;
+		case 88u:
+			rd *= -1;
+			return (rd > 0 ? 821u : 197u);
+			break;
+		case 89u:
+			return 613u;
+			break;
+		case 90u:
+			return 357u;
+			break;
+		case 91u:
+			rd *= -1;
+			return (rd > 0 ? 869u : 149u);
+			break;
+		case 92u:
+			return 229u;
+			break;
+		case 93u:
+			rd *= -1;
+			return (rd > 0 ? 741u : 277u);
+			break;
+		case 94u:
+			rd *= -1;
+			return (rd > 0 ? 485u : 533u);
+			break;
+		case 95u:
+			rd *= -1;
+			return (rd > 0 ? 693u : 325u);
+			break;
+		case 96u:
+			rd *= -1;
+			return (rd > 0 ? 627u : 396u);
+			break;
+		case 97u:
+			rd *= -1;
+			return (rd > 0 ? 467u : 556u);
+			break;
+		case 98u:
+			rd *= -1;
+			return (rd > 0 ? 723u : 300u);
+			break;
+		case 99u:
+			return (rd < 0 ? 796u : 787u);
+			break;
+		case 100u:
+			rd *= -1;
+			return (rd > 0 ? 851u : 172u);
+			break;
+		case 101u:
+			return (rd < 0 ? 668u : 659u);
+			break;
+		case 102u:
+			return (rd < 0 ? 412u : 403u);
+			break;
+		case 103u:
+			return (rd < 0 ? 908u : 115u);
+			break;
+		case 104u:
+			rd *= -1;
+			return (rd > 0 ? 915u : 108u);
+			break;
+		case 105u:
+			return (rd < 0 ? 604u : 595u);
+			break;
+		case 106u:
+			return (rd < 0 ? 348u : 339u);
+			break;
+		case 107u:
+			return (rd < 0 ? 844u : 835u);
+			break;
+		case 108u:
+			return (rd < 0 ? 220u : 211u);
+			break;
+		case 109u:
+			return (rd < 0 ? 716u : 707u);
+			break;
+		case 110u:
+			return (rd < 0 ? 460u : 451u);
+			break;
+		case 111u:
+			rd *= -1;
+			return (rd > 0 ? 371u : 652u);
+			break;
+		case 112u:
+			rd *= -1;
+			return (rd > 0 ? 435u : 588u);
+			break;
+		case 113u:
+			return (rd < 0 ? 572u : 563u);
+			break;
+		case 114u:
+			return (rd < 0 ? 316u : 307u);
+			break;
+		case 115u:
+			return (rd < 0 ? 812u : 803u);
+			break;
+		case 116u:
+			return (rd < 0 ? 188u : 179u);
+			break;
+		case 117u:
+			return (rd < 0 ? 684u : 675u);
+			break;
+		case 118u:
+			return (rd < 0 ? 428u : 419u);
+			break;
+		case 119u:
+			rd *= -1;
+			return (rd > 0 ? 931u : 92u);
+			break;
+		case 120u:
+			rd *= -1;
+			return (rd > 0 ? 819u : 204u);
+			break;
+		case 121u:
+			return (rd < 0 ? 620u : 611u);
+			break;
+		case 122u:
+			return (rd < 0 ? 364u : 355u);
+			break;
+		case 123u:
+			rd *= -1;
+			return (rd > 0 ? 867u : 156u);
+			break;
+		case 124u:
+			return (rd < 0 ? 236u : 227u);
+			break;
+		case 125u:
+			rd *= -1;
+			return (rd > 0 ? 739u : 284u);
+			break;
+		case 126u:
+			rd *= -1;
+			return (rd > 0 ? 483u : 540u);
+			break;
+		case 127u:
+			rd *= -1;
+			return (rd > 0 ? 691u : 332u);
+			break;
+		case 128u:
+			return (rd < 0 ? 626u : 397u);
+			break;
+		case 129u:
+			return (rd < 0 ? 466u : 557u);
+			break;
+		case 130u:
+			return (rd < 0 ? 722u : 301u);
+			break;
+		case 131u:
+			rd *= -1;
+			return (rd > 0 ? 797u : 786u);
+			break;
+		case 132u:
+			return (rd < 0 ? 850u : 173u);
+			break;
+		case 133u:
+			rd *= -1;
+			return (rd > 0 ? 669u : 658u);
+			break;
+		case 134u:
+			rd *= -1;
+			return (rd > 0 ? 413u : 402u);
+			break;
+		case 135u:
+			rd *= -1;
+			return (rd > 0 ? 909u : 114u);
+			break;
+		case 136u:
+			return (rd < 0 ? 914u : 109u);
+			break;
+		case 137u:
+			rd *= -1;
+			return (rd > 0 ? 605u : 594u);
+			break;
+		case 138u:
+			rd *= -1;
+			return (rd > 0 ? 349u : 338u);
+			break;
+		case 139u:
+			rd *= -1;
+			return (rd > 0 ? 845u : 834u);
+			break;
+		case 140u:
+			rd *= -1;
+			return (rd > 0 ? 221u : 210u);
+			break;
+		case 141u:
+			rd *= -1;
+			return (rd > 0 ? 717u : 706u);
+			break;
+		case 142u:
+			rd *= -1;
+			return (rd > 0 ? 461u : 450u);
+			break;
+		case 143u:
+			return (rd < 0 ? 370u : 653u);
+			break;
+		case 144u:
+			return (rd < 0 ? 434u : 589u);
+			break;
+		case 145u:
+			rd *= -1;
+			return (rd > 0 ? 573u : 562u);
+			break;
+		case 146u:
+			rd *= -1;
+			return (rd > 0 ? 317u : 306u);
+			break;
+		case 147u:
+			rd *= -1;
+			return (rd > 0 ? 813u : 802u);
+			break;
+		case 148u:
+			rd *= -1;
+			return (rd > 0 ? 189u : 178u);
+			break;
+		case 149u:
+			rd *= -1;
+			return (rd > 0 ? 685u : 674u);
+			break;
+		case 150u:
+			rd *= -1;
+			return (rd > 0 ? 429u : 418u);
+			break;
+		case 151u:
+			return (rd < 0 ? 930u : 93u);
+			break;
+		case 152u:
+			return (rd < 0 ? 818u : 205u);
+			break;
+		case 153u:
+			rd *= -1;
+			return (rd > 0 ? 621u : 610u);
+			break;
+		case 154u:
+			rd *= -1;
+			return (rd > 0 ? 365u : 354u);
+			break;
+		case 155u:
+			return (rd < 0 ? 866u : 157u);
+			break;
+		case 156u:
+			rd *= -1;
+			return (rd > 0 ? 237u : 226u);
+			break;
+		case 157u:
+			return (rd < 0 ? 738u : 285u);
+			break;
+		case 158u:
+			return (rd < 0 ? 482u : 541u);
+			break;
+		case 159u:
+			return (rd < 0 ? 690u : 333u);
+			break;
+		case 160u:
+			rd *= -1;
+			return (rd > 0 ? 634u : 394u);
+			break;
+		case 161u:
+			rd *= -1;
+			return (rd > 0 ? 474u : 554u);
+			break;
+		case 162u:
+			rd *= -1;
+			return (rd > 0 ? 730u : 298u);
+			break;
+		case 163u:
+			return 794u;
+			break;
+		case 164u:
+			rd *= -1;
+			return (rd > 0 ? 858u : 170u);
+			break;
+		case 165u:
+			return 666u;
+			break;
+		case 166u:
+			return 410u;
+			break;
+		case 167u:
+			return (rd < 0 ? 906u : 122u);
+			break;
+		case 168u:
+			rd *= -1;
+			return (rd > 0 ? 922u : 106u);
+			break;
+		case 169u:
+			return 602u;
+			break;
+		case 170u:
+			return 346u;
+			break;
+		case 171u:
+			return 842u;
+			break;
+		case 172u:
+			return 218u;
+			break;
+		case 173u:
+			return 714u;
+			break;
+		case 174u:
+			return 458u;
+			break;
+		case 175u:
+			rd *= -1;
+			return (rd > 0 ? 378u : 650u);
+			break;
+		case 176u:
+			rd *= -1;
+			return (rd > 0 ? 442u : 586u);
+			break;
+		case 177u:
+			return 570u;
+			break;
+		case 178u:
+			return 314u;
+			break;
+		case 179u:
+			return 810u;
+			break;
+		case 180u:
+			return 186u;
+			break;
+		case 181u:
+			return 682u;
+			break;
+		case 182u:
+			return 426u;
+			break;
+		case 183u:
+			rd *= -1;
+			return (rd > 0 ? 938u : 90u);
+			break;
+		case 184u:
+			rd *= -1;
+			return (rd > 0 ? 826u : 202u);
+			break;
+		case 185u:
+			return 618u;
+			break;
+		case 186u:
+			return 362u;
+			break;
+		case 187u:
+			rd *= -1;
+			return (rd > 0 ? 874u : 154u);
+			break;
+		case 188u:
+			return 234u;
+			break;
+		case 189u:
+			rd *= -1;
+			return (rd > 0 ? 746u : 282u);
+			break;
+		case 190u:
+			rd *= -1;
+			return (rd > 0 ? 490u : 538u);
+			break;
+		case 191u:
+			rd *= -1;
+			return (rd > 0 ? 698u : 330u);
+			break;
+		case 192u:
+			rd *= -1;
+			return (rd > 0 ? 630u : 390u);
+			break;
+		case 193u:
+			rd *= -1;
+			return (rd > 0 ? 470u : 550u);
+			break;
+		case 194u:
+			rd *= -1;
+			return (rd > 0 ? 726u : 294u);
+			break;
+		case 195u:
+			return 790u;
+			break;
+		case 196u:
+			rd *= -1;
+			return (rd > 0 ? 854u : 166u);
+			break;
+		case 197u:
+			return 662u;
+			break;
+		case 198u:
+			return 406u;
+			break;
+		case 199u:
+			return (rd < 0 ? 902u : 118u);
+			break;
+		case 200u:
+			rd *= -1;
+			return (rd > 0 ? 918u : 102u);
+			break;
+		case 201u:
+			return 598u;
+			break;
+		case 202u:
+			return 342u;
+			break;
+		case 203u:
+			return 838u;
+			break;
+		case 204u:
+			return 214u;
+			break;
+		case 205u:
+			return 710u;
+			break;
+		case 206u:
+			return 454u;
+			break;
+		case 207u:
+			rd *= -1;
+			return (rd > 0 ? 374u : 646u);
+			break;
+		case 208u:
+			rd *= -1;
+			return (rd > 0 ? 438u : 582u);
+			break;
+		case 209u:
+			return 566u;
+			break;
+		case 210u:
+			return 310u;
+			break;
+		case 211u:
+			return 806u;
+			break;
+		case 212u:
+			return 182u;
+			break;
+		case 213u:
+			return 678u;
+			break;
+		case 214u:
+			return 422u;
+			break;
+		case 215u:
+			rd *= -1;
+			return (rd > 0 ? 934u : 86u);
+			break;
+		case 216u:
+			rd *= -1;
+			return (rd > 0 ? 822u : 198u);
+			break;
+		case 217u:
+			return 614u;
+			break;
+		case 218u:
+			return 358u;
+			break;
+		case 219u:
+			rd *= -1;
+			return (rd > 0 ? 870u : 150u);
+			break;
+		case 220u:
+			return 230u;
+			break;
+		case 221u:
+			rd *= -1;
+			return (rd > 0 ? 742u : 278u);
+			break;
+		case 222u:
+			rd *= -1;
+			return (rd > 0 ? 486u : 534u);
+			break;
+		case 223u:
+			rd *= -1;
+			return (rd > 0 ? 694u : 326u);
+			break;
+		case 224u:
+			return (rd < 0 ? 625u : 398u);
+			break;
+		case 225u:
+			return (rd < 0 ? 465u : 558u);
+			break;
+		case 226u:
+			return (rd < 0 ? 721u : 302u);
+			break;
+		case 227u:
+			rd *= -1;
+			return (rd > 0 ? 798u : 785u);
+			break;
+		case 228u:
+			return (rd < 0 ? 849u : 174u);
+			break;
+		case 229u:
+			rd *= -1;
+			return (rd > 0 ? 670u : 657u);
+			break;
+		case 230u:
+			rd *= -1;
+			return (rd > 0 ? 414u : 401u);
+			break;
+		case 231u:
+			rd *= -1;
+			return (rd > 0 ? 910u : 113u);
+			break;
+		case 232u:
+			return (rd < 0 ? 913u : 110u);
+			break;
+		case 233u:
+			rd *= -1;
+			return (rd > 0 ? 606u : 593u);
+			break;
+		case 234u:
+			rd *= -1;
+			return (rd > 0 ? 350u : 337u);
+			break;
+		case 235u:
+			rd *= -1;
+			return (rd > 0 ? 846u : 840u);
+			break;
+		case 236u:
+			rd *= -1;
+			return (rd > 0 ? 222u : 209u);
+			break;
+		case 237u:
+			rd *= -1;
+			return (rd > 0 ? 718u : 712u);
+			break;
+		case 238u:
+			rd *= -1;
+			return (rd > 0 ? 462u : 456u);
+			break;
+		case 239u:
+			return (rd < 0 ? 369u : 654u);
+			break;
+		case 240u:
+			return (rd < 0 ? 433u : 590u);
+			break;
+		case 241u:
+			rd *= -1;
+			return (rd > 0 ? 567u : 561u);
+			break;
+		case 242u:
+			rd *= -1;
+			return (rd > 0 ? 311u : 305u);
+			break;
+		case 243u:
+			rd *= -1;
+			return (rd > 0 ? 814u : 801u);
+			break;
+		case 244u:
+			rd *= -1;
+			return (rd > 0 ? 183u : 177u);
+			break;
+		case 245u:
+			rd *= -1;
+			return (rd > 0 ? 686u : 673u);
+			break;
+		case 246u:
+			rd *= -1;
+			return (rd > 0 ? 430u : 417u);
+			break;
+		case 247u:
+			return (rd < 0 ? 929u : 94u);
+			break;
+		case 248u:
+			return (rd < 0 ? 817u : 206u);
+			break;
+		case 249u:
+			rd *= -1;
+			return (rd > 0 ? 622u : 609u);
+			break;
+		case 250u:
+			rd *= -1;
+			return (rd > 0 ? 366u : 353u);
+			break;
+		case 251u:
+			return (rd < 0 ? 865u : 158u);
+			break;
+		case 252u:
+			rd *= -1;
+			return (rd > 0 ? 238u : 225u);
+			break;
+		case 253u:
+			return (rd < 0 ? 737u : 286u);
+			break;
+		case 254u:
+			return (rd < 0 ? 481u : 542u);
+			break;
+		case 255u:
+			return (rd < 0 ? 689u : 334u);
+			break;
+		default:
+			return 0x3FF; // 10-bit integer: 0011 1111 1111
+			break;
 	}
 }
 
-void createSearchTable() {
+unsigned char decode8B10B(unsigned int data) {
 
-	// Creates table that, for a given 8 bit input, gives the 10 bit encoding.
-	// The 8 bit input is the table's main index. The sub-index 0 gives the decoding when rd is negative;
-	// the sub-index 1, when rd is negative; the sub-index 2 informs whether to change (-1) or to keep (1)
-	// rd's signal
-
-	searchTable[0][0]   = 628; searchTable[0][1]   = 395; searchTable[0][2]   =  1;
-	searchTable[1][0]   = 468; searchTable[1][1]   = 555; searchTable[1][2]   =  1;
-	searchTable[2][0]   = 724; searchTable[2][1]   = 299; searchTable[2][2]   =  1;
-	searchTable[3][0]   = 795; searchTable[3][1]   = 788; searchTable[3][2]   = -1;
-	searchTable[4][0]   = 852; searchTable[4][1]   = 171; searchTable[4][2]   =  1;
-	searchTable[5][0]   = 667; searchTable[5][1]   = 660; searchTable[5][2]   = -1;
-	searchTable[6][0]   = 411; searchTable[6][1]   = 404; searchTable[6][2]   = -1;
-	searchTable[7][0]   = 907; searchTable[7][1]   = 116; searchTable[7][2]   = -1;
-	searchTable[8][0]   = 916; searchTable[8][1]   = 107; searchTable[8][2]   =  1;
-	searchTable[9][0]   = 603; searchTable[9][1]   = 596; searchTable[9][2]   = -1;
-	searchTable[10][0]  = 347; searchTable[10][1]  = 340; searchTable[10][2]  = -1;
-	searchTable[11][0]  = 843; searchTable[11][1]  = 836; searchTable[11][2]  = -1;
-	searchTable[12][0]  = 219; searchTable[12][1]  = 212; searchTable[12][2]  = -1;
-	searchTable[13][0]  = 715; searchTable[13][1]  = 708; searchTable[13][2]  = -1;
-	searchTable[14][0]  = 459; searchTable[14][1]  = 452; searchTable[14][2]  = -1;
-	searchTable[15][0]  = 372; searchTable[15][1]  = 651; searchTable[15][2]  =  1;
-	searchTable[16][0]  = 436; searchTable[16][1]  = 587; searchTable[16][2]  =  1;
-	searchTable[17][0]  = 571; searchTable[17][1]  = 564; searchTable[17][2]  = -1;
-	searchTable[18][0]  = 315; searchTable[18][1]  = 308; searchTable[18][2]  = -1;
-	searchTable[19][0]  = 811; searchTable[19][1]  = 804; searchTable[19][2]  = -1;
-	searchTable[20][0]  = 187; searchTable[20][1]  = 180; searchTable[20][2]  = -1;
-	searchTable[21][0]  = 683; searchTable[21][1]  = 676; searchTable[21][2]  = -1;
-	searchTable[22][0]  = 427; searchTable[22][1]  = 420; searchTable[22][2]  = -1;
-	searchTable[23][0]  = 932; searchTable[23][1]  =  91; searchTable[23][2]  =  1;
-	searchTable[24][0]  = 820; searchTable[24][1]  = 203; searchTable[24][2]  =  1;
-	searchTable[25][0]  = 619; searchTable[25][1]  = 612; searchTable[25][2]  = -1;
-	searchTable[26][0]  = 363; searchTable[26][1]  = 356; searchTable[26][2]  = -1;
-	searchTable[27][0]  = 868; searchTable[27][1]  = 155; searchTable[27][2]  =  1;
-	searchTable[28][0]  = 235; searchTable[28][1]  = 228; searchTable[28][2]  = -1;
-	searchTable[29][0]  = 740; searchTable[29][1]  = 283; searchTable[29][2]  =  1;
-	searchTable[30][0]  = 484; searchTable[30][1]  = 539; searchTable[30][2]  =  1;
-	searchTable[31][0]  = 692; searchTable[31][1]  = 331; searchTable[31][2]  =  1;
-	searchTable[32][0]  = 633; searchTable[32][1]  = 393; searchTable[32][2]  = -1;
-	searchTable[33][0]  = 473; searchTable[33][1]  = 553; searchTable[33][2]  = -1;
-	searchTable[34][0]  = 729; searchTable[34][1]  = 297; searchTable[34][2]  = -1;
-	searchTable[35][0]  = 793; searchTable[35][1]  = 793; searchTable[35][2]  =  1;
-	searchTable[36][0]  = 857; searchTable[36][1]  = 169; searchTable[36][2]  = -1;
-	searchTable[37][0]  = 665; searchTable[37][1]  = 665; searchTable[37][2]  =  1;
-	searchTable[38][0]  = 409; searchTable[38][1]  = 409; searchTable[38][2]  =  1;
-	searchTable[39][0]  = 905; searchTable[39][1]  = 121; searchTable[39][2]  =  1;
-	searchTable[40][0]  = 921; searchTable[40][1]  = 105; searchTable[40][2]  = -1;
-	searchTable[41][0]  = 601; searchTable[41][1]  = 601; searchTable[41][2]  =  1;
-	searchTable[42][0]  = 345; searchTable[42][1]  = 345; searchTable[42][2]  =  1;
-	searchTable[43][0]  = 841; searchTable[43][1]  = 841; searchTable[43][2]  =  1;
-	searchTable[44][0]  = 217; searchTable[44][1]  = 217; searchTable[44][2]  =  1;
-	searchTable[45][0]  = 713; searchTable[45][1]  = 713; searchTable[45][2]  =  1;
-	searchTable[46][0]  = 457; searchTable[46][1]  = 457; searchTable[46][2]  =  1;
-	searchTable[47][0]  = 377; searchTable[47][1]  = 649; searchTable[47][2]  = -1;
-	searchTable[48][0]  = 441; searchTable[48][1]  = 585; searchTable[48][2]  = -1;
-	searchTable[49][0]  = 569; searchTable[49][1]  = 569; searchTable[49][2]  =  1;
-	searchTable[50][0]  = 313; searchTable[50][1]  = 313; searchTable[50][2]  =  1;
-	searchTable[51][0]  = 809; searchTable[51][1]  = 809; searchTable[51][2]  =  1;
-	searchTable[52][0]  = 185; searchTable[52][1]  = 185; searchTable[52][2]  =  1;
-	searchTable[53][0]  = 681; searchTable[53][1]  = 681; searchTable[53][2]  =  1;
-	searchTable[54][0]  = 425; searchTable[54][1]  = 425; searchTable[54][2]  =  1;
-	searchTable[55][0]  = 937; searchTable[55][1]  =  89; searchTable[55][2]  = -1;
-	searchTable[56][0]  = 825; searchTable[56][1]  = 201; searchTable[56][2]  = -1;
-	searchTable[57][0]  = 617; searchTable[57][1]  = 617; searchTable[57][2]  =  1;
-	searchTable[58][0]  = 361; searchTable[58][1]  = 361; searchTable[58][2]  =  1;
-	searchTable[59][0]  = 873; searchTable[59][1]  = 153; searchTable[59][2]  = -1;
-	searchTable[60][0]  = 233; searchTable[60][1]  = 233; searchTable[60][2]  =  1;
-	searchTable[61][0]  = 745; searchTable[61][1]  = 281; searchTable[61][2]  = -1;
-	searchTable[62][0]  = 489; searchTable[62][1]  = 537; searchTable[62][2]  = -1;
-	searchTable[63][0]  = 697; searchTable[63][1]  = 329; searchTable[63][2]  = -1;
-	searchTable[64][0]  = 629; searchTable[64][1]  = 389; searchTable[64][2]  = -1;
-	searchTable[65][0]  = 469; searchTable[65][1]  = 549; searchTable[65][2]  = -1;
-	searchTable[66][0]  = 725; searchTable[66][1]  = 293; searchTable[66][2]  = -1;
-	searchTable[67][0]  = 789; searchTable[67][1]  = 789; searchTable[67][2]  =  1;
-	searchTable[68][0]  = 853; searchTable[68][1]  = 165; searchTable[68][2]  = -1;
-	searchTable[69][0]  = 661; searchTable[69][1]  = 661; searchTable[69][2]  =  1;
-	searchTable[70][0]  = 405; searchTable[70][1]  = 405; searchTable[70][2]  =  1;
-	searchTable[71][0]  = 901; searchTable[71][1]  = 117; searchTable[71][2]  =  1;
-	searchTable[72][0]  = 917; searchTable[72][1]  = 101; searchTable[72][2]  = -1;
-	searchTable[73][0]  = 597; searchTable[73][1]  = 597; searchTable[73][2]  =  1;
-	searchTable[74][0]  = 341; searchTable[74][1]  = 341; searchTable[74][2]  =  1;
-	searchTable[75][0]  = 837; searchTable[75][1]  = 837; searchTable[75][2]  =  1;
-	searchTable[76][0]  = 213; searchTable[76][1]  = 213; searchTable[76][2]  =  1;
-	searchTable[77][0]  = 709; searchTable[77][1]  = 709; searchTable[77][2]  =  1;
-	searchTable[78][0]  = 453; searchTable[78][1]  = 453; searchTable[78][2]  =  1;
-	searchTable[79][0]  = 373; searchTable[79][1]  = 645; searchTable[79][2]  = -1;
-	searchTable[80][0]  = 437; searchTable[80][1]  = 581; searchTable[80][2]  = -1;
-	searchTable[81][0]  = 565; searchTable[81][1]  = 565; searchTable[81][2]  =  1;
-	searchTable[82][0]  = 309; searchTable[82][1]  = 309; searchTable[82][2]  =  1;
-	searchTable[83][0]  = 805; searchTable[83][1]  = 805; searchTable[83][2]  =  1;
-	searchTable[84][0]  = 181; searchTable[84][1]  = 181; searchTable[84][2]  =  1;
-	searchTable[85][0]  = 677; searchTable[85][1]  = 677; searchTable[85][2]  =  1;
-	searchTable[86][0]  = 421; searchTable[86][1]  = 421; searchTable[86][2]  =  1;
-	searchTable[87][0]  = 933; searchTable[87][1]  =  85; searchTable[87][2]  = -1;
-	searchTable[88][0]  = 821; searchTable[88][1]  = 197; searchTable[88][2]  = -1;
-	searchTable[89][0]  = 613; searchTable[89][1]  = 613; searchTable[89][2]  =  1;
-	searchTable[90][0]  = 357; searchTable[90][1]  = 357; searchTable[90][2]  =  1;
-	searchTable[91][0]  = 869; searchTable[91][1]  = 149; searchTable[91][2]  = -1;
-	searchTable[92][0]  = 229; searchTable[92][1]  = 229; searchTable[92][2]  =  1;
-	searchTable[93][0]  = 741; searchTable[93][1]  = 277; searchTable[93][2]  = -1;
-	searchTable[94][0]  = 485; searchTable[94][1]  = 533; searchTable[94][2]  = -1;
-	searchTable[95][0]  = 693; searchTable[95][1]  = 325; searchTable[95][2]  = -1;
-	searchTable[96][0]  = 627; searchTable[96][1]  = 396; searchTable[96][2]  = -1;
-	searchTable[97][0]  = 467; searchTable[97][1]  = 556; searchTable[97][2]  = -1;
-	searchTable[98][0]  = 723; searchTable[98][1]  = 300; searchTable[98][2]  = -1;
-	searchTable[99][0]  = 796; searchTable[99][1]  = 787; searchTable[99][2]  =  1;
-	searchTable[100][0] = 851; searchTable[100][1] = 172; searchTable[100][2] = -1;
-	searchTable[101][0] = 668; searchTable[101][1] = 659; searchTable[101][2] =  1;
-	searchTable[102][0] = 412; searchTable[102][1] = 403; searchTable[102][2] =  1;
-	searchTable[103][0] = 908; searchTable[103][1] = 115; searchTable[103][2] =  1;
-	searchTable[104][0] = 915; searchTable[104][1] = 108; searchTable[104][2] = -1;
-	searchTable[105][0] = 604; searchTable[105][1] = 595; searchTable[105][2] =  1;
-	searchTable[106][0] = 348; searchTable[106][1] = 339; searchTable[106][2] =  1;
-	searchTable[107][0] = 844; searchTable[107][1] = 835; searchTable[107][2] =  1;
-	searchTable[108][0] = 220; searchTable[108][1] = 211; searchTable[108][2] =  1;
-	searchTable[109][0] = 716; searchTable[109][1] = 707; searchTable[109][2] =  1;
-	searchTable[110][0] = 460; searchTable[110][1] = 451; searchTable[110][2] =  1;
-	searchTable[111][0] = 371; searchTable[111][1] = 652; searchTable[111][2] = -1;
-	searchTable[112][0] = 435; searchTable[112][1] = 588; searchTable[112][2] = -1;
-	searchTable[113][0] = 572; searchTable[113][1] = 563; searchTable[113][2] =  1;
-	searchTable[114][0] = 316; searchTable[114][1] = 307; searchTable[114][2] =  1;
-	searchTable[115][0] = 812; searchTable[115][1] = 803; searchTable[115][2] =  1;
-	searchTable[116][0] = 188; searchTable[116][1] = 179; searchTable[116][2] =  1;
-	searchTable[117][0] = 684; searchTable[117][1] = 675; searchTable[117][2] =  1;
-	searchTable[118][0] = 428; searchTable[118][1] = 419; searchTable[118][2] =  1;
-	searchTable[119][0] = 931; searchTable[119][1] =  92; searchTable[119][2] = -1;
-	searchTable[120][0] = 819; searchTable[120][1] = 204; searchTable[120][2] = -1;
-	searchTable[121][0] = 620; searchTable[121][1] = 611; searchTable[121][2] =  1;
-	searchTable[122][0] = 364; searchTable[122][1] = 355; searchTable[122][2] =  1;
-	searchTable[123][0] = 867; searchTable[123][1] = 156; searchTable[123][2] = -1;
-	searchTable[124][0] = 236; searchTable[124][1] = 227; searchTable[124][2] =  1;
-	searchTable[125][0] = 739; searchTable[125][1] = 284; searchTable[125][2] = -1;
-	searchTable[126][0] = 483; searchTable[126][1] = 540; searchTable[126][2] = -1;
-	searchTable[127][0] = 691; searchTable[127][1] = 332; searchTable[127][2] = -1;
-	searchTable[128][0] = 626; searchTable[128][1] = 397; searchTable[128][2] =  1;
-	searchTable[129][0] = 466; searchTable[129][1] = 557; searchTable[129][2] =  1;
-	searchTable[130][0] = 722; searchTable[130][1] = 301; searchTable[130][2] =  1;
-	searchTable[131][0] = 797; searchTable[131][1] = 786; searchTable[131][2] = -1;
-	searchTable[132][0] = 850; searchTable[132][1] = 173; searchTable[132][2] =  1;
-	searchTable[133][0] = 669; searchTable[133][1] = 658; searchTable[133][2] = -1;
-	searchTable[134][0] = 413; searchTable[134][1] = 402; searchTable[134][2] = -1;
-	searchTable[135][0] = 909; searchTable[135][1] = 114; searchTable[135][2] = -1;
-	searchTable[136][0] = 914; searchTable[136][1] = 109; searchTable[136][2] =  1;
-	searchTable[137][0] = 605; searchTable[137][1] = 594; searchTable[137][2] = -1;
-	searchTable[138][0] = 349; searchTable[138][1] = 338; searchTable[138][2] = -1;
-	searchTable[139][0] = 845; searchTable[139][1] = 834; searchTable[139][2] = -1;
-	searchTable[140][0] = 221; searchTable[140][1] = 210; searchTable[140][2] = -1;
-	searchTable[141][0] = 717; searchTable[141][1] = 706; searchTable[141][2] = -1;
-	searchTable[142][0] = 461; searchTable[142][1] = 450; searchTable[142][2] = -1;
-	searchTable[143][0] = 370; searchTable[143][1] = 653; searchTable[143][2] =  1;
-	searchTable[144][0] = 434; searchTable[144][1] = 589; searchTable[144][2] =  1;
-	searchTable[145][0] = 573; searchTable[145][1] = 562; searchTable[145][2] = -1;
-	searchTable[146][0] = 317; searchTable[146][1] = 306; searchTable[146][2] = -1;
-	searchTable[147][0] = 813; searchTable[147][1] = 802; searchTable[147][2] = -1;
-	searchTable[148][0] = 189; searchTable[148][1] = 178; searchTable[148][2] = -1;
-	searchTable[149][0] = 685; searchTable[149][1] = 674; searchTable[149][2] = -1;
-	searchTable[150][0] = 429; searchTable[150][1] = 418; searchTable[150][2] = -1;
-	searchTable[151][0] = 930; searchTable[151][1] =  93; searchTable[151][2] =  1;
-	searchTable[152][0] = 818; searchTable[152][1] = 205; searchTable[152][2] =  1;
-	searchTable[153][0] = 621; searchTable[153][1] = 610; searchTable[153][2] = -1;
-	searchTable[154][0] = 365; searchTable[154][1] = 354; searchTable[154][2] = -1;
-	searchTable[155][0] = 866; searchTable[155][1] = 157; searchTable[155][2] =  1;
-	searchTable[156][0] = 237; searchTable[156][1] = 226; searchTable[156][2] = -1;
-	searchTable[157][0] = 738; searchTable[157][1] = 285; searchTable[157][2] =  1;
-	searchTable[158][0] = 482; searchTable[158][1] = 541; searchTable[158][2] =  1;
-	searchTable[159][0] = 690; searchTable[159][1] = 333; searchTable[159][2] =  1;
-	searchTable[160][0] = 634; searchTable[160][1] = 394; searchTable[160][2] = -1;
-	searchTable[161][0] = 474; searchTable[161][1] = 554; searchTable[161][2] = -1;
-	searchTable[162][0] = 730; searchTable[162][1] = 298; searchTable[162][2] = -1;
-	searchTable[163][0] = 794; searchTable[163][1] = 794; searchTable[163][2] =  1;
-	searchTable[164][0] = 858; searchTable[164][1] = 170; searchTable[164][2] = -1;
-	searchTable[165][0] = 666; searchTable[165][1] = 666; searchTable[165][2] =  1;
-	searchTable[166][0] = 410; searchTable[166][1] = 410; searchTable[166][2] =  1;
-	searchTable[167][0] = 906; searchTable[167][1] = 122; searchTable[167][2] =  1;
-	searchTable[168][0] = 922; searchTable[168][1] = 106; searchTable[168][2] = -1;
-	searchTable[169][0] = 602; searchTable[169][1] = 602; searchTable[169][2] =  1;
-	searchTable[170][0] = 346; searchTable[170][1] = 346; searchTable[170][2] =  1;
-	searchTable[171][0] = 842; searchTable[171][1] = 842; searchTable[171][2] =  1;
-	searchTable[172][0] = 218; searchTable[172][1] = 218; searchTable[172][2] =  1;
-	searchTable[173][0] = 714; searchTable[173][1] = 714; searchTable[173][2] =  1;
-	searchTable[174][0] = 458; searchTable[174][1] = 458; searchTable[174][2] =  1;
-	searchTable[175][0] = 378; searchTable[175][1] = 650; searchTable[175][2] = -1;
-	searchTable[176][0] = 442; searchTable[176][1] = 586; searchTable[176][2] = -1;
-	searchTable[177][0] = 570; searchTable[177][1] = 570; searchTable[177][2] =  1;
-	searchTable[178][0] = 314; searchTable[178][1] = 314; searchTable[178][2] =  1;
-	searchTable[179][0] = 810; searchTable[179][1] = 810; searchTable[179][2] =  1;
-	searchTable[180][0] = 186; searchTable[180][1] = 186; searchTable[180][2] =  1;
-	searchTable[181][0] = 682; searchTable[181][1] = 682; searchTable[181][2] =  1;
-	searchTable[182][0] = 426; searchTable[182][1] = 426; searchTable[182][2] =  1;
-	searchTable[183][0] = 938; searchTable[183][1] =  90; searchTable[183][2] = -1;
-	searchTable[184][0] = 826; searchTable[184][1] = 202; searchTable[184][2] = -1;
-	searchTable[185][0] = 618; searchTable[185][1] = 618; searchTable[185][2] =  1;
-	searchTable[186][0] = 362; searchTable[186][1] = 362; searchTable[186][2] =  1;
-	searchTable[187][0] = 874; searchTable[187][1] = 154; searchTable[187][2] = -1;
-	searchTable[188][0] = 234; searchTable[188][1] = 234; searchTable[188][2] =  1;
-	searchTable[189][0] = 746; searchTable[189][1] = 282; searchTable[189][2] = -1;
-	searchTable[190][0] = 490; searchTable[190][1] = 538; searchTable[190][2] = -1;
-	searchTable[191][0] = 698; searchTable[191][1] = 330; searchTable[191][2] = -1;
-	searchTable[192][0] = 630; searchTable[192][1] = 390; searchTable[192][2] = -1;
-	searchTable[193][0] = 470; searchTable[193][1] = 550; searchTable[193][2] = -1;
-	searchTable[194][0] = 726; searchTable[194][1] = 294; searchTable[194][2] = -1;
-	searchTable[195][0] = 790; searchTable[195][1] = 790; searchTable[195][2] =  1;
-	searchTable[196][0] = 854; searchTable[196][1] = 166; searchTable[196][2] = -1;
-	searchTable[197][0] = 662; searchTable[197][1] = 662; searchTable[197][2] =  1;
-	searchTable[198][0] = 406; searchTable[198][1] = 406; searchTable[198][2] =  1;
-	searchTable[199][0] = 902; searchTable[199][1] = 118; searchTable[199][2] =  1;
-	searchTable[200][0] = 918; searchTable[200][1] = 102; searchTable[200][2] = -1;
-	searchTable[201][0] = 598; searchTable[201][1] = 598; searchTable[201][2] =  1;
-	searchTable[202][0] = 342; searchTable[202][1] = 342; searchTable[202][2] =  1;
-	searchTable[203][0] = 838; searchTable[203][1] = 838; searchTable[203][2] =  1;
-	searchTable[204][0] = 214; searchTable[204][1] = 214; searchTable[204][2] =  1;
-	searchTable[205][0] = 710; searchTable[205][1] = 710; searchTable[205][2] =  1;
-	searchTable[206][0] = 454; searchTable[206][1] = 454; searchTable[206][2] =  1;
-	searchTable[207][0] = 374; searchTable[207][1] = 646; searchTable[207][2] = -1;
-	searchTable[208][0] = 438; searchTable[208][1] = 582; searchTable[208][2] = -1;
-	searchTable[209][0] = 566; searchTable[209][1] = 566; searchTable[209][2] =  1;
-	searchTable[210][0] = 310; searchTable[210][1] = 310; searchTable[210][2] =  1;
-	searchTable[211][0] = 806; searchTable[211][1] = 806; searchTable[211][2] =  1;
-	searchTable[212][0] = 182; searchTable[212][1] = 182; searchTable[212][2] =  1;
-	searchTable[213][0] = 678; searchTable[213][1] = 678; searchTable[213][2] =  1;
-	searchTable[214][0] = 422; searchTable[214][1] = 422; searchTable[214][2] =  1;
-	searchTable[215][0] = 934; searchTable[215][1] =  86; searchTable[215][2] = -1;
-	searchTable[216][0] = 822; searchTable[216][1] = 198; searchTable[216][2] = -1;
-	searchTable[217][0] = 614; searchTable[217][1] = 614; searchTable[217][2] =  1;
-	searchTable[218][0] = 358; searchTable[218][1] = 358; searchTable[218][2] =  1;
-	searchTable[219][0] = 870; searchTable[219][1] = 150; searchTable[219][2] = -1;
-	searchTable[220][0] = 230; searchTable[220][1] = 230; searchTable[220][2] =  1;
-	searchTable[221][0] = 742; searchTable[221][1] = 278; searchTable[221][2] = -1;
-	searchTable[222][0] = 486; searchTable[222][1] = 534; searchTable[222][2] = -1;
-	searchTable[223][0] = 694; searchTable[223][1] = 326; searchTable[223][2] = -1;
-	searchTable[224][0] = 625; searchTable[224][1] = 398; searchTable[224][2] =  1;
-	searchTable[225][0] = 465; searchTable[225][1] = 558; searchTable[225][2] =  1;
-	searchTable[226][0] = 721; searchTable[226][1] = 302; searchTable[226][2] =  1;
-	searchTable[227][0] = 798; searchTable[227][1] = 785; searchTable[227][2] = -1;
-	searchTable[228][0] = 849; searchTable[228][1] = 174; searchTable[228][2] =  1;
-	searchTable[229][0] = 670; searchTable[229][1] = 657; searchTable[229][2] = -1;
-	searchTable[230][0] = 414; searchTable[230][1] = 401; searchTable[230][2] = -1;
-	searchTable[231][0] = 910; searchTable[231][1] = 113; searchTable[231][2] = -1;
-	searchTable[232][0] = 913; searchTable[232][1] = 110; searchTable[232][2] =  1;
-	searchTable[233][0] = 606; searchTable[233][1] = 593; searchTable[233][2] = -1;
-	searchTable[234][0] = 350; searchTable[234][1] = 337; searchTable[234][2] = -1;
-	searchTable[235][0] = 846; searchTable[235][1] = 840; searchTable[235][2] = -1;
-	searchTable[236][0] = 222; searchTable[236][1] = 209; searchTable[236][2] = -1;
-	searchTable[237][0] = 718; searchTable[237][1] = 712; searchTable[237][2] = -1;
-	searchTable[238][0] = 462; searchTable[238][1] = 456; searchTable[238][2] = -1;
-	searchTable[239][0] = 369; searchTable[239][1] = 654; searchTable[239][2] =  1;
-	searchTable[240][0] = 433; searchTable[240][1] = 590; searchTable[240][2] =  1;
-	searchTable[241][0] = 567; searchTable[241][1] = 561; searchTable[241][2] = -1;
-	searchTable[242][0] = 311; searchTable[242][1] = 305; searchTable[242][2] = -1;
-	searchTable[243][0] = 814; searchTable[243][1] = 801; searchTable[243][2] = -1;
-	searchTable[244][0] = 183; searchTable[244][1] = 177; searchTable[244][2] = -1;
-	searchTable[245][0] = 686; searchTable[245][1] = 673; searchTable[245][2] = -1;
-	searchTable[246][0] = 430; searchTable[246][1] = 417; searchTable[246][2] = -1;
-	searchTable[247][0] = 929; searchTable[247][1] =  94; searchTable[247][2] =  1;
-	searchTable[248][0] = 817; searchTable[248][1] = 206; searchTable[248][2] =  1;
-	searchTable[249][0] = 622; searchTable[249][1] = 609; searchTable[249][2] = -1;
-	searchTable[250][0] = 366; searchTable[250][1] = 353; searchTable[250][2] = -1;
-	searchTable[251][0] = 865; searchTable[251][1] = 158; searchTable[251][2] =  1;
-	searchTable[252][0] = 238; searchTable[252][1] = 225; searchTable[252][2] = -1;
-	searchTable[253][0] = 737; searchTable[253][1] = 286; searchTable[253][2] =  1;
-	searchTable[254][0] = 481; searchTable[254][1] = 542; searchTable[254][2] =  1;
-	searchTable[255][0] = 689; searchTable[255][1] = 334; searchTable[255][2] =  1;
+	switch (data) {
+		case 628u:
+		case 395u:
+			return 0u;
+			break;
+		case 468u:
+		case 555u:
+			return 1u;
+			break;
+		case 724u:
+		case 299u:
+			return 2u;
+			break;
+		case 795u:
+		case 788u:
+			return 3u;
+			break;
+		case 852u:
+		case 171u:
+			return 4u;
+			break;
+		case 667u:
+		case 660u:
+			return 5u;
+			break;
+		case 411u:
+		case 404u:
+			return 6u;
+			break;
+		case 907u:
+		case 116u:
+			return 7u;
+			break;
+		case 916u:
+		case 107u:
+			return 8u;
+			break;
+		case 603u:
+		case 596u:
+			return 9u;
+			break;
+		case 347u:
+		case 340u:
+			return 10u;
+			break;
+		case 843u:
+		case 836u:
+			return 11u;
+			break;
+		case 219u:
+		case 212u:
+			return 12u;
+			break;
+		case 715u:
+		case 708u:
+			return 13u;
+			break;
+		case 459u:
+		case 452u:
+			return 14u;
+			break;
+		case 372u:
+		case 651u:
+			return 15u;
+			break;
+		case 436u:
+		case 587u:
+			return 16u;
+			break;
+		case 571u:
+		case 564u:
+			return 17u;
+			break;
+		case 315u:
+		case 308u:
+			return 18u;
+			break;
+		case 811u:
+		case 804u:
+			return 19u;
+			break;
+		case 187u:
+		case 180u:
+			return 20u;
+			break;
+		case 683u:
+		case 676u:
+			return 21u;
+			break;
+		case 427u:
+		case 420u:
+			return 22u;
+			break;
+		case 932u:
+		case 91u:
+			return 23u;
+			break;
+		case 820u:
+		case 203u:
+			return 24u;
+			break;
+		case 619u:
+		case 612u:
+			return 25u;
+			break;
+		case 363u:
+		case 356u:
+			return 26u;
+			break;
+		case 868u:
+		case 155u:
+			return 27u;
+			break;
+		case 235u:
+		case 228u:
+			return 28u;
+			break;
+		case 740u:
+		case 283u:
+			return 29u;
+			break;
+		case 484u:
+		case 539u:
+			return 30u;
+			break;
+		case 692u:
+		case 331u:
+			return 31u;
+			break;
+		case 633u:
+		case 393u:
+			return 32u;
+			break;
+		case 473u:
+		case 553u:
+			return 33u;
+			break;
+		case 729u:
+		case 297u:
+			return 34u;
+			break;
+		case 793u:
+			return 35u;
+			break;
+		case 857u:
+		case 169u:
+			return 36u;
+			break;
+		case 665u:
+			return 37u;
+			break;
+		case 409u:
+			return 38u;
+			break;
+		case 905u:
+		case 121u:
+			return 39u;
+			break;
+		case 921u:
+		case 105u:
+			return 40u;
+			break;
+		case 601u:
+			return 41u;
+			break;
+		case 345u:
+			return 42u;
+			break;
+		case 841u:
+			return 43u;
+			break;
+		case 217u:
+			return 44u;
+			break;
+		case 713u:
+			return 45u;
+			break;
+		case 457u:
+			return 46u;
+			break;
+		case 377u:
+		case 649u:
+			return 47u;
+			break;
+		case 441u:
+		case 585u:
+			return 48u;
+			break;
+		case 569u:
+			return 49u;
+			break;
+		case 313u:
+			return 50u;
+			break;
+		case 809u:
+			return 51u;
+			break;
+		case 185u:
+			return 52u;
+			break;
+		case 681u:
+			return 53u;
+			break;
+		case 425u:
+			return 54u;
+			break;
+		case 937u:
+		case 89u:
+			return 55u;
+			break;
+		case 825u:
+		case 201u:
+			return 56u;
+			break;
+		case 617u:
+			return 57u;
+			break;
+		case 361u:
+			return 58u;
+			break;
+		case 873u:
+		case 153u:
+			return 59u;
+			break;
+		case 233u:
+			return 60u;
+			break;
+		case 745u:
+		case 281u:
+			return 61u;
+			break;
+		case 489u:
+		case 537u:
+			return 62u;
+			break;
+		case 697u:
+		case 329u:
+			return 63u;
+			break;
+		case 629u:
+		case 389u:
+			return 64u;
+			break;
+		case 469u:
+		case 549u:
+			return 65u;
+			break;
+		case 725u:
+		case 293u:
+			return 66u;
+			break;
+		case 789u:
+			return 67u;
+			break;
+		case 853u:
+		case 165u:
+			return 68u;
+			break;
+		case 661u:
+			return 69u;
+			break;
+		case 405u:
+			return 70u;
+			break;
+		case 901u:
+		case 117u:
+			return 71u;
+			break;
+		case 917u:
+		case 101u:
+			return 72u;
+			break;
+		case 597u:
+			return 73u;
+			break;
+		case 341u:
+			return 74u;
+			break;
+		case 837u:
+			return 75u;
+			break;
+		case 213u:
+			return 76u;
+			break;
+		case 709u:
+			return 77u;
+			break;
+		case 453u:
+			return 78u;
+			break;
+		case 373u:
+		case 645u:
+			return 79u;
+			break;
+		case 437u:
+		case 581u:
+			return 80u;
+			break;
+		case 565u:
+			return 81u;
+			break;
+		case 309u:
+			return 82u;
+			break;
+		case 805u:
+			return 83u;
+			break;
+		case 181u:
+			return 84u;
+			break;
+		case 677u:
+			return 85u;
+			break;
+		case 421u:
+			return 86u;
+			break;
+		case 933u:
+		case 85u:
+			return 87u;
+			break;
+		case 821u:
+		case 197u:
+			return 88u;
+			break;
+		case 613u:
+			return 89u;
+			break;
+		case 357u:
+			return 90u;
+			break;
+		case 869u:
+		case 149u:
+			return 91u;
+			break;
+		case 229u:
+			return 92u;
+			break;
+		case 741u:
+		case 277u:
+			return 93u;
+			break;
+		case 485u:
+		case 533u:
+			return 94u;
+			break;
+		case 693u:
+		case 325u:
+			return 95u;
+			break;
+		case 627u:
+		case 396u:
+			return 96u;
+			break;
+		case 467u:
+		case 556u:
+			return 97u;
+			break;
+		case 723u:
+		case 300u:
+			return 98u;
+			break;
+		case 796u:
+		case 787u:
+			return 99u;
+			break;
+		case 851u:
+		case 172u:
+			return 100u;
+			break;
+		case 668u:
+		case 659u:
+			return 101u;
+			break;
+		case 412u:
+		case 403u:
+			return 102u;
+			break;
+		case 908u:
+		case 115u:
+			return 103u;
+			break;
+		case 915u:
+		case 108u:
+			return 104u;
+			break;
+		case 604u:
+		case 595u:
+			return 105u;
+			break;
+		case 348u:
+		case 339u:
+			return 106u;
+			break;
+		case 844u:
+		case 835u:
+			return 107u;
+			break;
+		case 220u:
+		case 211u:
+			return 108u;
+			break;
+		case 716u:
+		case 707u:
+			return 109u;
+			break;
+		case 460u:
+		case 451u:
+			return 110u;
+			break;
+		case 371u:
+		case 652u:
+			return 111u;
+			break;
+		case 435u:
+		case 588u:
+			return 112u;
+			break;
+		case 572u:
+		case 563u:
+			return 113u;
+			break;
+		case 316u:
+		case 307u:
+			return 114u;
+			break;
+		case 812u:
+		case 803u:
+			return 115u;
+			break;
+		case 188u:
+		case 179u:
+			return 116u;
+			break;
+		case 684u:
+		case 675u:
+			return 117u;
+			break;
+		case 428u:
+		case 419u:
+			return 118u;
+			break;
+		case 931u:
+		case 92u:
+			return 119u;
+			break;
+		case 819u:
+		case 204u:
+			return 120u;
+			break;
+		case 620u:
+		case 611u:
+			return 121u;
+			break;
+		case 364u:
+		case 355u:
+			return 122u;
+			break;
+		case 867u:
+		case 156u:
+			return 123u;
+			break;
+		case 236u:
+		case 227u:
+			return 124u;
+			break;
+		case 739u:
+		case 284u:
+			return 125u;
+			break;
+		case 483u:
+		case 540u:
+			return 126u;
+			break;
+		case 691u:
+		case 332u:
+			return 127u;
+			break;
+		case 626u:
+		case 397u:
+			return 128u;
+			break;
+		case 466u:
+		case 557u:
+			return 129u;
+			break;
+		case 722u:
+		case 301u:
+			return 130u;
+			break;
+		case 797u:
+		case 786u:
+			return 131u;
+			break;
+		case 850u:
+		case 173u:
+			return 132u;
+			break;
+		case 669u:
+		case 658u:
+			return 133u;
+			break;
+		case 413u:
+		case 402u:
+			return 134u;
+			break;
+		case 909u:
+		case 114u:
+			return 135u;
+			break;
+		case 914u:
+		case 109u:
+			return 136u;
+			break;
+		case 605u:
+		case 594u:
+			return 137u;
+			break;
+		case 349u:
+		case 338u:
+			return 138u;
+			break;
+		case 845u:
+		case 834u:
+			return 139u;
+			break;
+		case 221u:
+		case 210u:
+			return 140u;
+			break;
+		case 717u:
+		case 706u:
+			return 141u;
+			break;
+		case 461u:
+		case 450u:
+			return 142u;
+			break;
+		case 370u:
+		case 653u:
+			return 143u;
+			break;
+		case 434u:
+		case 589u:
+			return 144u;
+			break;
+		case 573u:
+		case 562u:
+			return 145u;
+			break;
+		case 317u:
+		case 306u:
+			return 146u;
+			break;
+		case 813u:
+		case 802u:
+			return 147u;
+			break;
+		case 189u:
+		case 178u:
+			return 148u;
+			break;
+		case 685u:
+		case 674u:
+			return 149u;
+			break;
+		case 429u:
+		case 418u:
+			return 150u;
+			break;
+		case 930u:
+		case 93u:
+			return 151u;
+			break;
+		case 818u:
+		case 205u:
+			return 152u;
+			break;
+		case 621u:
+		case 610u:
+			return 153u;
+			break;
+		case 365u:
+		case 354u:
+			return 154u;
+			break;
+		case 866u:
+		case 157u:
+			return 155u;
+			break;
+		case 237u:
+		case 226u:
+			return 156u;
+			break;
+		case 738u:
+		case 285u:
+			return 157u;
+			break;
+		case 482u:
+		case 541u:
+			return 158u;
+			break;
+		case 690u:
+		case 333u:
+			return 159u;
+			break;
+		case 634u:
+		case 394u:
+			return 160u;
+			break;
+		case 474u:
+		case 554u:
+			return 161u;
+			break;
+		case 730u:
+		case 298u:
+			return 162u;
+			break;
+		case 794u:
+			return 163u;
+			break;
+		case 858u:
+		case 170u:
+			return 164u;
+			break;
+		case 666u:
+			return 165u;
+			break;
+		case 410u:
+			return 166u;
+			break;
+		case 906u:
+		case 122u:
+			return 167u;
+			break;
+		case 922u:
+		case 106u:
+			return 168u;
+			break;
+		case 602u:
+			return 169u;
+			break;
+		case 346u:
+			return 170u;
+			break;
+		case 842u:
+			return 171u;
+			break;
+		case 218u:
+			return 172u;
+			break;
+		case 714u:
+			return 173u;
+			break;
+		case 458u:
+			return 174u;
+			break;
+		case 378u:
+		case 650u:
+			return 175u;
+			break;
+		case 442u:
+		case 586u:
+			return 176u;
+			break;
+		case 570u:
+			return 177u;
+			break;
+		case 314u:
+			return 178u;
+			break;
+		case 810u:
+			return 179u;
+			break;
+		case 186u:
+			return 180u;
+			break;
+		case 682u:
+			return 181u;
+			break;
+		case 426u:
+			return 182u;
+			break;
+		case 938u:
+		case 90u:
+			return 183u;
+			break;
+		case 826u:
+		case 202u:
+			return 184u;
+			break;
+		case 618u:
+			return 185u;
+			break;
+		case 362u:
+			return 186u;
+			break;
+		case 874u:
+		case 154u:
+			return 187u;
+			break;
+		case 234u:
+			return 188u;
+			break;
+		case 746u:
+		case 282u:
+			return 189u;
+			break;
+		case 490u:
+		case 538u:
+			return 190u;
+			break;
+		case 698u:
+		case 330u:
+			return 191u;
+			break;
+		case 630u:
+		case 390u:
+			return 192u;
+			break;
+		case 470u:
+		case 550u:
+			return 193u;
+			break;
+		case 726u:
+		case 294u:
+			return 194u;
+			break;
+		case 790u:
+			return 195u;
+			break;
+		case 854u:
+		case 166u:
+			return 196u;
+			break;
+		case 662u:
+			return 197u;
+			break;
+		case 406u:
+			return 198u;
+			break;
+		case 902u:
+		case 118u:
+			return 199u;
+			break;
+		case 918u:
+		case 102u:
+			return 200u;
+			break;
+		case 598u:
+			return 201u;
+			break;
+		case 342u:
+			return 202u;
+			break;
+		case 838u:
+			return 203u;
+			break;
+		case 214u:
+			return 204u;
+			break;
+		case 710u:
+			return 205u;
+			break;
+		case 454u:
+			return 206u;
+			break;
+		case 374u:
+		case 646u:
+			return 207u;
+			break;
+		case 438u:
+		case 582u:
+			return 208u;
+			break;
+		case 566u:
+			return 209u;
+			break;
+		case 310u:
+			return 210u;
+			break;
+		case 806u:
+			return 211u;
+			break;
+		case 182u:
+			return 212u;
+			break;
+		case 678u:
+			return 213u;
+			break;
+		case 422u:
+			return 214u;
+			break;
+		case 934u:
+		case 86u:
+			return 215u;
+			break;
+		case 822u:
+		case 198u:
+			return 216u;
+			break;
+		case 614u:
+			return 217u;
+			break;
+		case 358u:
+			return 218u;
+			break;
+		case 870u:
+		case 150u:
+			return 219u;
+			break;
+		case 230u:
+			return 220u;
+			break;
+		case 742u:
+		case 278u:
+			return 221u;
+			break;
+		case 486u:
+		case 534u:
+			return 222u;
+			break;
+		case 694u:
+		case 326u:
+			return 223u;
+			break;
+		case 625u:
+		case 398u:
+			return 224u;
+			break;
+		case 465u:
+		case 558u:
+			return 225u;
+			break;
+		case 721u:
+		case 302u:
+			return 226u;
+			break;
+		case 798u:
+		case 785u:
+			return 227u;
+			break;
+		case 849u:
+		case 174u:
+			return 228u;
+			break;
+		case 670u:
+		case 657u:
+			return 229u;
+			break;
+		case 414u:
+		case 401u:
+			return 230u;
+			break;
+		case 910u:
+		case 113u:
+			return 231u;
+			break;
+		case 913u:
+		case 110u:
+			return 232u;
+			break;
+		case 606u:
+		case 593u:
+			return 233u;
+			break;
+		case 350u:
+		case 337u:
+			return 234u;
+			break;
+		case 846u:
+		case 840u:
+			return 235u;
+			break;
+		case 222u:
+		case 209u:
+			return 236u;
+			break;
+		case 718u:
+		case 712u:
+			return 237u;
+			break;
+		case 462u:
+		case 456u:
+			return 238u;
+			break;
+		case 369u:
+		case 654u:
+			return 239u;
+			break;
+		case 433u:
+		case 590u:
+			return 240u;
+			break;
+		case 567u:
+		case 561u:
+			return 241u;
+			break;
+		case 311u:
+		case 305u:
+			return 242u;
+			break;
+		case 814u:
+		case 801u:
+			return 243u;
+			break;
+		case 183u:
+		case 177u:
+			return 244u;
+			break;
+		case 686u:
+		case 673u:
+			return 245u;
+			break;
+		case 430u:
+		case 417u:
+			return 246u;
+			break;
+		case 929u:
+		case 94u:
+			return 247u;
+			break;
+		case 817u:
+		case 206u:
+			return 248u;
+			break;
+		case 622u:
+		case 609u:
+			return 249u;
+			break;
+		case 366u:
+		case 353u:
+			return 250u;
+			break;
+		case 865u:
+		case 158u:
+			return 251u;
+			break;
+		case 238u:
+		case 225u:
+			return 252u;
+			break;
+		case 737u:
+		case 286u:
+			return 253u;
+			break;
+		case 481u:
+		case 542u:
+			return 254u;
+			break;
+		case 689u:
+		case 334u:
+			return 255u;
+			break;
+	}
 }
