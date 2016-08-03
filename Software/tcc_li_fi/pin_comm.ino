@@ -87,7 +87,8 @@ void setBitDelay() {
 	}
 }
 
-void setupPins() {
+void setupPinComm() {
 	pinMode(OUTPUT_PIN, OUTPUT);
 	pinMode(INPUT_PIN, INPUT);
+	setBitDelay();
 }
