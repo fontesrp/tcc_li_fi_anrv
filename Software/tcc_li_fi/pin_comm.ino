@@ -39,6 +39,77 @@ unsigned int receive10b() {
 	return data;
 }
 
+unsigned long generateSetBitData(unsigned char bitQtt) {
+
+	// For bitQtt = 30, should return the 30-bit integer 1073741823 = 0x3FFFFFFF = 0011 1111 1111 1111 1111 1111 1111 1111
+
+	unsigned long data = 0u;
+
+	for (; bitQtt > 3; bitQtt -= 4) {
+		data = (data << 4) | 0xF;
+	}
+
+	for (; bitQtt; bitQtt--) {
+		data = (data << 1) | 1u;
+	}
+
+	return data;
+}
+
+void waitSyncMessage() {
+
+	unsigned char i, bitsReceived = 0u;
+	unsigned long converter, data = 0u;
+	char pinState;
+
+	// noInterrupts();
+	converter = generateSetBitData(SYNC_MESSAGE_BIT_SIZE);
+
+	while (data != syncMessage) {
+
+		pinState = digitalRead(INPUT_PIN);
+		data = (data << 1) | (pinState == LOW ? 0u : 1u);
+
+		if (bitsReceived < SYNC_MESSAGE_BIT_SIZE) {
+			bitsReceived++;
+		} else {
+			data &= converter;
+		}
+
+		delayMicroseconds(microBitDelay);
+		delay(milliBitDelay);
+	}
+
+	// interrupts();
+}
+
+void sendSyncMessage() {
+
+	unsigned char i, len;
+	unsigned int converter, data;
+
+	converter = generateSetBitData(DATA_BIT_SIZE);
+	len = sizeof(syncChars) / sizeof(syncChars[0]);
+
+	for (i = 0u; i < len; i++) {
+		data = (syncMessage >> (i * DATA_BIT_SIZE)) & converter;
+		send10b(data);
+	}
+}
+
+void generateSyncMessage(encodeFunction encode) {
+
+	unsigned char i, len;
+
+	len = sizeof(syncChars) / sizeof(syncChars[0]);
+	syncMessage = 0u;
+
+	for (i = 0u; i < len; i++) {
+		syncMessage = syncMessage << DATA_BIT_SIZE;
+		syncMessage |= encode(syncChars[i]);
+	}
+}
+
 unsigned int generateAlternatingBitData(unsigned char bitQtt) {
 
 	// For bitQtt = 10, should return the 10-bit integer 682 = 0x2AA = 0010 1010 1010
