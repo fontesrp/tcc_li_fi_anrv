@@ -1,4 +1,4 @@
-#include "encode.h"
+#include "encoding_8b10b.h"
 
 void setup8B10B() {
 
