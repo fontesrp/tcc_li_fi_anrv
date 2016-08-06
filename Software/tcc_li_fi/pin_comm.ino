@@ -1,5 +1,22 @@
 #include "pin_comm.h"
 
+unsigned long generateSetBitData(unsigned char bitQtt) {
+
+	// For bitQtt = 30, should return the 30-bit integer 1073741823 = 0x3FFFFFFF = 0011 1111 1111 1111 1111 1111 1111 1111
+
+	unsigned long data = 0u;
+
+	for (; bitQtt > 3; bitQtt -= 4) {
+		data = (data << 4) | 0xF;
+	}
+
+	for (; bitQtt; bitQtt--) {
+		data = (data << 1) | 1u;
+	}
+
+	return data;
+}
+
 void send10b(unsigned int data) {
 
 	unsigned char i;
@@ -17,6 +34,41 @@ void send10b(unsigned int data) {
 	}
 
 	// interrupts();
+}
+
+void sendLetter(unsigned char letter) {
+
+	unsigned int encodedLetter;
+
+	encodedLetter = encode8B10B(letter);
+	send10b(encodedLetter);
+}
+
+void sendSyncMessage() {
+
+	unsigned char i, len;
+	unsigned int converter, data;
+
+	converter = generateSetBitData(DATA_BIT_SIZE);
+	len = sizeof(syncChars) / sizeof(syncChars[0]);
+
+	for (i = 0u; i < len; i++) {
+		data = (syncMessage >> (i * DATA_BIT_SIZE)) & converter;
+		send10b(data);
+	}
+}
+
+void sendPhrase(unsigned char * message, unsigned char messageSize) {
+
+	unsigned char i;
+
+	sendSyncMessage();
+
+	for (i = 0; i < messageSize && message[i] != '\0'; i++) {
+		sendLetter(message[i]);
+	}
+
+	sendLetter('\0');
 }
 
 unsigned int receive10b() {
@@ -39,21 +91,12 @@ unsigned int receive10b() {
 	return data;
 }
 
-unsigned long generateSetBitData(unsigned char bitQtt) {
+unsigned char receiveLetter() {
 
-	// For bitQtt = 30, should return the 30-bit integer 1073741823 = 0x3FFFFFFF = 0011 1111 1111 1111 1111 1111 1111 1111
+	unsigned int encodedLetter;
 
-	unsigned long data = 0u;
-
-	for (; bitQtt > 3; bitQtt -= 4) {
-		data = (data << 4) | 0xF;
-	}
-
-	for (; bitQtt; bitQtt--) {
-		data = (data << 1) | 1u;
-	}
-
-	return data;
+	encodedLetter = receive10b();
+	return decode8B10B(encodedLetter);
 }
 
 void waitSyncMessage() {
@@ -83,21 +126,25 @@ void waitSyncMessage() {
 	// interrupts();
 }
 
-void sendSyncMessage() {
+void receivePhrase(unsigned char * message, unsigned char messageSize) {
 
-	unsigned char i, len;
-	unsigned int converter, data;
+	unsigned char i;
 
-	converter = generateSetBitData(DATA_BIT_SIZE);
-	len = sizeof(syncChars) / sizeof(syncChars[0]);
+	waitSyncMessage();
 
-	for (i = 0u; i < len; i++) {
-		data = (syncMessage >> (i * DATA_BIT_SIZE)) & converter;
-		send10b(data);
+	for (i = 0; i < messageSize; i++) {
+		message[i] = receiveLetter();
+		if (message[i] == '\0') {
+			i = messageSize;
+		}
+	}
+
+	if (i == messageSize) {
+		message[i - 1] = '\0';
 	}
 }
 
-void generateSyncMessage(encodeFunction encode) {
+void generateSyncMessage() {
 
 	unsigned char i, len;
 
@@ -106,7 +153,7 @@ void generateSyncMessage(encodeFunction encode) {
 
 	for (i = 0u; i < len; i++) {
 		syncMessage = syncMessage << DATA_BIT_SIZE;
-		syncMessage |= encode(syncChars[i]);
+		syncMessage |= encode8B10B(syncChars[i]);
 	}
 }
 
@@ -161,5 +208,7 @@ void setBitDelay() {
 void setupPinComm() {
 	pinMode(OUTPUT_PIN, OUTPUT);
 	pinMode(INPUT_PIN, INPUT);
+	setup8B10B();
 	setBitDelay();
+	generateSyncMessage();
 }

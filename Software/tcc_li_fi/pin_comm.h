@@ -21,9 +21,15 @@
 //  2u -> 4 kbps (T =  250 us)
 //  1u -> 8 kbps (T =  125 us)
 
+// -- encoding_8b10b.ino
+void setup8B10B();
+unsigned int encode8B10B(unsigned char data);
+unsigned char decode8B10B(unsigned int data);
+// --
+
 // All bit times are in microseconds
+const unsigned long desiredBitTime = 500u; // Rate = 2 kbps
 unsigned long minimumBitTime = 0u;
-unsigned long desiredBitTime = 500u; // Rate = 2 kbps
 
 // Delays for achieving the desired bit time
 unsigned int microBitDelay = 0u;
@@ -32,11 +38,5 @@ unsigned int milliBitDelay = 0u;
 // Extended ASCII codes for omega, dash and start of text
 const unsigned char syncChars[3] = {234, 45, 2}; // 0xEA, 0x2D, 0x02 = Ohm, '-', STX (start of text)
 unsigned long syncMessage;
-
-// Pointer to the 8b10b encoding function; used to encode syncChars
-#ifndef ENCODE_FUNCTION
-#define ENCODE_FUNCTION
-typedef unsigned int (*encodeFunction)(unsigned char data);
-#endif
 
 #endif
