@@ -20,14 +20,16 @@ unsigned long generateSetBitData(unsigned char bitQtt) {
 void send10b(unsigned int data) {
 
 	unsigned char i;
-	unsigned int converter = 1u;
+	unsigned int converter;
 	char pinState;
+
+	converter = 1u << (DATA_BIT_SIZE - 1);
 
 	// noInterrupts();
 
 	for (i = 0u; i < DATA_BIT_SIZE; i++) {
 		pinState  = ((data & converter) == 0u ? LOW : HIGH);
-		converter = converter << 1;
+		converter = converter >> 1;
 		digitalWrite(OUTPUT_PIN, pinState);
 		delayMicroseconds(microBitDelay);
 		delay(milliBitDelay);
@@ -46,14 +48,17 @@ void sendLetter(unsigned char letter) {
 
 void sendSyncMessage() {
 
-	unsigned char i, len;
-	unsigned int converter, data;
+	unsigned char len;
+	unsigned int data;
+	unsigned long converter;
 
-	converter = generateSetBitData(DATA_BIT_SIZE);
 	len = sizeof(syncChars) / sizeof(syncChars[0]);
+	converter = generateSetBitData(DATA_BIT_SIZE);
+	converter = converter << ((len - 1) * DATA_BIT_SIZE);
 
-	for (i = 0u; i < len; i++) {
-		data = (syncMessage >> (i * DATA_BIT_SIZE)) & converter;
+	for (; len; len--) {
+		data = (syncMessage  & converter) >> ((len - 1) * DATA_BIT_SIZE);
+		converter = converter >> DATA_BIT_SIZE;
 		send10b(data);
 	}
 }
@@ -62,13 +67,20 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
 
 	unsigned char i;
 
+	Serial.println("pin_comm.ino sendPhrase: sending sync message");
+
 	sendSyncMessage();
+
+	Serial.println("pin_comm.ino sendPhrase: sync message sent");
+	Serial.println("pin_comm.ino sendPhrase: sending phrase");
 
 	for (i = 0; i < messageSize && message[i] != '\0'; i++) {
 		sendLetter(message[i]);
 	}
 
 	sendLetter('\0');
+
+	Serial.println("pin_comm.ino sendPhrase: phrase sent");
 }
 
 unsigned int receive10b() {
@@ -101,7 +113,7 @@ unsigned char receiveLetter() {
 
 void waitSyncMessage() {
 
-	unsigned char i, bitsReceived = 0u;
+	unsigned char i;
 	unsigned long converter, data = 0u;
 	char pinState;
 
@@ -112,13 +124,7 @@ void waitSyncMessage() {
 
 		pinState = digitalRead(INPUT_PIN);
 		data = (data << 1) | (pinState == LOW ? 0u : 1u);
-
-		if (bitsReceived < SYNC_MESSAGE_BIT_SIZE) {
-			bitsReceived++;
-		} else {
-			data &= converter;
-		}
-
+		data &= converter;
 		delayMicroseconds(microBitDelay);
 		delay(milliBitDelay);
 	}
@@ -130,18 +136,20 @@ void receivePhrase(unsigned char * message, unsigned char messageSize) {
 
 	unsigned char i;
 
+	Serial.println("pin_comm.ino receivePhrase: waiting for sync message");
+
 	waitSyncMessage();
+
+	Serial.println("pin_comm.ino receivePhrase: sync message received");
+	Serial.println("pin_comm.ino receivePhrase: getting phrase");
 
 	for (i = 0; i < messageSize; i++) {
 		message[i] = receiveLetter();
-		if (message[i] == '\0') {
-			i = messageSize;
-		}
 	}
 
-	if (i == messageSize) {
-		message[i - 1] = '\0';
-	}
+	message[i - 1] = '\0';
+
+	Serial.println("pin_comm.ino receivePhrase: returning phrase");
 }
 
 void generateSyncMessage() {
