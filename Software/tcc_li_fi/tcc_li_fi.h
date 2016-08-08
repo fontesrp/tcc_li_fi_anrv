@@ -10,9 +10,9 @@ void sendPhrase(unsigned char * message, unsigned char messageSize);
 #define MESSAGE_SIZE 21
 
 #if defined(__AVR_ATmega2560__) // Arduino Mega 2560 (sender)
-const unsigned char message[MESSAGE_SIZE] = "Testing Arduino comm";
+const char message[MESSAGE_SIZE] = "Testing Arduino comm\0";
 #elif defined(__AVR_ATmega328P__) // Arduino UNO R3 (receiver)
-unsigned char message[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+char message[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 #endif
 
 #endif
