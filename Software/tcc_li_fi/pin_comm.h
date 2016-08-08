@@ -36,7 +36,7 @@ unsigned int microBitDelay = 0u;
 unsigned int milliBitDelay = 0u;
 
 // Extended ASCII codes for omega, dash and start of text
-const unsigned char syncChars[3] = {234, 45, 2}; // 0xEA, 0x2D, 0x02 = Ohm, '-', STX (start of text)
-unsigned long syncMessage;
+const unsigned char syncChars[3] = {234u, 45u, 2u}; // 0xEA, 0x2D, 0x02 = Ohm, '-', STX (Coded message is: 0x15E, 0x2C9, 0x12B)
+unsigned long syncMessage; // 0x15EB252B = 0001 0101 1110 1011 0010 0101 0010 1011
 
 #endif
