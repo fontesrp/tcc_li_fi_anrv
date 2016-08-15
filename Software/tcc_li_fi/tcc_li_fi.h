@@ -8,11 +8,13 @@ void sendPhrase(unsigned char * message, unsigned char messageSize);
 // --
 
 #define MESSAGE_SIZE 21
+#define ROLE_PIN 24
+#define SENDER HIGH
+#define RECEIVER LOW
 
-#if defined(__AVR_ATmega2560__) // Arduino Mega 2560 (sender)
-const char message[MESSAGE_SIZE] = "Testing Arduino comm\0";
-#elif defined(__AVR_ATmega328P__) // Arduino UNO R3 (receiver)
-char message[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
-#endif
+char boardRole;
+
+unsigned char sendMessage[MESSAGE_SIZE] = "Testing Arduino comm";
+unsigned char receivedMessage[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
 #endif

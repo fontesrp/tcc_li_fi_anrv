@@ -1,20 +1,15 @@
 #ifndef pin_comm_h
 #define pin_comm_h
 
-#if defined(__AVR_ATmega2560__) // Arduino Mega 2560
 #define OUTPUT_PIN 22
 #define INPUT_PIN  23
-#elif defined(__AVR_ATmega328P__) // Arduino UNO R3
-#define OUTPUT_PIN 2
-#define INPUT_PIN  4
-#endif
 
 // Bit sizes are used as 'unsigned char'
 #define DATA_BIT_SIZE 10u
 #define SYNC_MESSAGE_BIT_SIZE 30u
 
 // Factor used to adjust the delay time to the imprecision of the Arduino functions delayMicroseconds() and delay()
-#define DELAY_CORRECTION_FACTOR 5u
+#define DELAY_CORRECTION_FACTOR 12u
 // The best factors for different bit rates are:
 // 12u -> 1 kbps (T = 1000 us)
 //  5u -> 2 kbps (T =  500 us)
@@ -28,7 +23,7 @@ unsigned char decode8B10B(unsigned int data);
 // --
 
 // All bit times are in microseconds
-const unsigned long desiredBitTime = 500u; // Rate = 2 kbps
+const unsigned long desiredBitTime = 1000u; // Rate = 1 kbps
 unsigned long minimumBitTime = 0u;
 
 // Delays for achieving the desired bit time
