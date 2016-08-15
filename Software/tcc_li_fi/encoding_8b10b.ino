@@ -1860,5 +1860,8 @@ unsigned char decode8B10B(unsigned int data) {
 		case 334u:
 			return 255u;
 			break;
+		default:
+			return 0u;
+			break;
 	}
 }
