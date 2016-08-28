@@ -10,7 +10,7 @@
 #define SYNC_MESSAGE_BIT_SIZE 30u
 
 // Sets device to send/receive data at 1000 bits/sec ~= 1kHz
-#define COMM_BIT_RATE 1000u;
+#define COMM_BIT_RATE 1000u
 
 // From encoding_8b10b.ino
 void setup8B10B();
