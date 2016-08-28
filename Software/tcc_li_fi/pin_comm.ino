@@ -1,5 +1,16 @@
 #include "pin_comm.h"
 
+void TC3_Handler() {
+	TC_GetStatus(TC1, 0); // TC1, ch 0
+	if (sendBitReady) {
+		digitalWrite(OUTPUT_PIN, commPinState);
+		sendBitReady = false;
+	} else if (receiveBitReady) {
+		commPinState = digitalRead(INPUT_PIN);
+		receiveBitReady = false;
+	}
+}
+
 unsigned long generateSetBitData(unsigned char bitQtt) {
 
 	// For bitQtt = 30, should return the 30-bit integer 1073741823 = 0x3FFFFFFF = 0011 1111 1111 1111 1111 1111 1111 1111
@@ -19,23 +30,17 @@ unsigned long generateSetBitData(unsigned char bitQtt) {
 
 void send10b(unsigned int data) {
 
-	unsigned char i;
-	unsigned int converter;
-	char pinState;
+	unsigned int converter = 1u;
 
-	converter = 1u << (DATA_BIT_SIZE - 1);
+	// loop starts converter as (10 0000 0000)
 
-	// noInterrupts();
-
-	for (i = 0u; i < DATA_BIT_SIZE; i++) {
-		pinState  = ((data & converter) == 0u ? LOW : HIGH);
-		converter = converter >> 1;
-		digitalWrite(OUTPUT_PIN, pinState);
-		delayMicroseconds(microBitDelay);
-		delay(milliBitDelay);
+	for (converter <<= (DATA_BIT_SIZE - 1); converter; converter >>= 1) {
+		commPinState = ((data & converter) ? HIGH : LOW);
+		sendBitReady = true;
+		while (sendBitReady) {
+			;
+		}
 	}
-
-	// interrupts();
 }
 
 void sendLetter(unsigned char letter) {
@@ -54,11 +59,11 @@ void sendSyncMessage() {
 
 	len = sizeof(syncChars) / sizeof(syncChars[0]);
 	converter = generateSetBitData(DATA_BIT_SIZE);
-	converter = converter << ((len - 1) * DATA_BIT_SIZE);
+	converter <<= ((len - 1) * DATA_BIT_SIZE);
 
 	for (; len; len--) {
 		data = (syncMessage  & converter) >> ((len - 1) * DATA_BIT_SIZE);
-		converter = converter >> DATA_BIT_SIZE;
+		converter >>= DATA_BIT_SIZE;
 		send10b(data);
 	}
 }
@@ -87,18 +92,14 @@ unsigned int receive10b() {
 
 	unsigned char i;
 	unsigned int data = 0u;
-	char pinState;
-
-	// noInterrupts();
 
 	for (i = 0u; i < DATA_BIT_SIZE; i++) {
-		pinState = digitalRead(INPUT_PIN);
-		data = (data << 1) | (pinState == LOW ? 0u : 1u);
-		delayMicroseconds(microBitDelay);
-		delay(milliBitDelay);
+		receiveBitReady = true;
+		while (receiveBitReady) {
+			;
+		}
+		data = (data << 1) | (commPinState == LOW ? 0u : 1u);
 	}
-
-	// interrupts();
 
 	return data;
 }
@@ -113,23 +114,17 @@ unsigned char receiveLetter() {
 
 void waitSyncMessage() {
 
-	unsigned char i;
 	unsigned long converter, data = 0u;
-	char pinState;
 
-	// noInterrupts();
 	converter = generateSetBitData(SYNC_MESSAGE_BIT_SIZE);
 
 	while (data != syncMessage) {
-
-		pinState = digitalRead(INPUT_PIN);
-		data = (data << 1) | (pinState == LOW ? 0u : 1u);
-		data &= converter;
-		delayMicroseconds(microBitDelay);
-		delay(milliBitDelay);
+		receiveBitReady = true;
+		while (receiveBitReady) {
+			;
+		}
+		data = ((data << 1) | (commPinState == LOW ? 0u : 1u)) & converter;
 	}
-
-	// interrupts();
 }
 
 void receivePhrase(unsigned char * message, unsigned char messageSize) {
@@ -152,6 +147,26 @@ void receivePhrase(unsigned char * message, unsigned char messageSize) {
 	Serial.println("pin_comm.ino receivePhrase: returning phrase");
 }
 
+void startTimer(Tc *tc, uint32_t channel, IRQn_Type irq, uint32_t frequency) {
+
+	// Parameters: Pointer to Timer Clock, TC's channel, the IRQ for that channel and the desired frequency in Hz
+
+	uint32_t rc = VARIANT_MCK / (128 * frequency); // 128 because we select TIMER_CLOCK4 below
+
+	pmc_set_writeprotect(false);
+	pmc_enable_periph_clk((uint32_t) irq);
+
+	TC_Configure(tc, channel, TC_CMR_WAVE | TC_CMR_WAVSEL_UP_RC | TC_CMR_TCCLKS_TIMER_CLOCK4);
+	TC_SetRA(tc, channel, rc / 2); // 50% high, 50% low
+	TC_SetRC(tc, channel, rc);
+	TC_Start(tc, channel);
+
+	tc->TC_CHANNEL[channel].TC_IER =  TC_IER_CPCS;
+	tc->TC_CHANNEL[channel].TC_IDR = ~TC_IER_CPCS;
+
+	NVIC_EnableIRQ(irq);
+}
+
 void generateSyncMessage() {
 
 	unsigned char i, len;
@@ -160,56 +175,7 @@ void generateSyncMessage() {
 	syncMessage = 0u;
 
 	for (i = 0u; i < len; i++) {
-		syncMessage = syncMessage << DATA_BIT_SIZE;
-		syncMessage |= encode8B10B(syncChars[i]);
-	}
-}
-
-unsigned int generateAlternatingBitData(unsigned char bitQtt) {
-
-	// For bitQtt = 10, should return the 10-bit integer 682 = 0x2AA = 0010 1010 1010
-
-	unsigned int data = 0u;
-
-	for (; bitQtt; bitQtt--) {
-		data = (data << 1) | ((bitQtt + 1u) % 2u); // Set all odd bits to 1
-	}
-
-	return data;
-}
-
-unsigned long getMinBitTime() {
-
-	// On both Arduino UNO R3 and Arduino Mega 2560, the maximum bit rate is about 277,777 bps (time ~= 36 us, for 10 bits)
-
-	unsigned long time;
-	unsigned int data;
-
-	data = generateAlternatingBitData(DATA_BIT_SIZE);
-
-	time = micros();
-	send10b(data);
-	time = micros() - time;
-
-	return time / DATA_BIT_SIZE;
-}
-
-void setBitDelay() {
-
-	microBitDelay = 0u;
-	milliBitDelay = 0u;
-
-	if (!minimumBitTime) {
-		minimumBitTime = getMinBitTime();
-	}
-
-	microBitDelay = desiredBitTime - minimumBitTime - DELAY_CORRECTION_FACTOR; // Everything in microseconds
-
-	// Arduino's documentation warns that, for values greater than 16,383, the function delayMicroseconds() won't produce an accurate delay
-	// For safety, a cap is put at 10,000. For delays greater than that, the delay() function is used
-	if (microBitDelay >= 10000u) {
-		microBitDelay = 0u;
-		milliBitDelay = (desiredBitTime - minimumBitTime) / 1000u; // Converts to milliseconds
+		syncMessage = (syncMessage << DATA_BIT_SIZE) | encode8B10B(syncChars[i]);
 	}
 }
 
@@ -217,6 +183,6 @@ void setupPinComm() {
 	pinMode(OUTPUT_PIN, OUTPUT);
 	pinMode(INPUT_PIN, INPUT);
 	setup8B10B();
-	setBitDelay();
 	generateSyncMessage();
+	startTimer(TC1, 0, TC3_IRQn, COMM_BIT_RATE); // TC1, channel 0, the IRQ for that channel and the desired frequency (in Hz)
 }
