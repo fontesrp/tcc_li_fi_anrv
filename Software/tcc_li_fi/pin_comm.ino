@@ -28,14 +28,14 @@ unsigned long generateSetBitData(unsigned char bitQtt) {
 	return data;
 }
 
-void send10b(unsigned int data) {
+void send10b(unsigned int data, unsigned char bits) {
 
 	unsigned int converter = 1u;
 
 	// loop starts converter as (10 0000 0000)
 
-	for (converter <<= (DATA_BIT_SIZE - 1); converter; converter >>= 1) {
-		commPinState = ((data & converter) ? HIGH : LOW);
+	for (converter <<= (bits - 1); converter; converter >>= 1) {
+		commPinState = data & converter;
 		sendBitReady = true;
 		while (sendBitReady) {
 			;
@@ -48,7 +48,8 @@ void sendLetter(unsigned char letter) {
 	unsigned int encodedLetter;
 
 	encodedLetter = encode8B10B(letter);
-	send10b(encodedLetter);
+	encodedLetter |= validDataHeader;
+	send10b(encodedLetter, DATA_BIT_SIZE + VALIDATION_HEADER_BIT_SIZE);
 }
 
 void sendSyncMessage() {
@@ -64,7 +65,7 @@ void sendSyncMessage() {
 	for (; len; len--) {
 		data = (syncMessage  & converter) >> ((len - 1) * DATA_BIT_SIZE);
 		converter >>= DATA_BIT_SIZE;
-		send10b(data);
+		send10b(data, DATA_BIT_SIZE);
 	}
 }
 
@@ -79,6 +80,11 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
 	Serial.println("pin_comm.ino sendPhrase: sync message sent");
 	Serial.println("pin_comm.ino sendPhrase: sending phrase");
 
+	i = micros();
+	while (micros() < i + 1000) {
+		;
+	}
+
 	for (i = 0; i < messageSize && message[i] != '\0'; i++) {
 		sendLetter(message[i]);
 	}
@@ -91,17 +97,18 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
 unsigned int receive10b() {
 
 	unsigned char i;
-	unsigned int data = 0u;
+	unsigned int data = 0u, header = 0u, converter = 0xFC00u;
 
-	for (i = 0u; i < DATA_BIT_SIZE; i++) {
+	while (header != validDataHeader) {
 		receiveBitReady = true;
 		while (receiveBitReady) {
 			;
 		}
-		data = (data << 1) | (commPinState == LOW ? 0u : 1u);
+		data = (data << 1) | (commPinState ? 1u : 0u);
+		header = data & converter;
 	}
 
-	return data;
+	return data & 0x3FFu;
 }
 
 unsigned char receiveLetter() {
@@ -129,18 +136,15 @@ void waitSyncMessage() {
 
 void receivePhrase(unsigned char * message, unsigned char messageSize) {
 
-	unsigned char i;
+	unsigned char i = 0;
 
-	Serial.println("pin_comm.ino receivePhrase: waiting for sync message");
+	Serial.println("pin_comm.ino receivePhrase: fired");
 
 	waitSyncMessage();
 
-	Serial.println("pin_comm.ino receivePhrase: sync message received");
-	Serial.println("pin_comm.ino receivePhrase: getting phrase");
-
-	for (i = 0; i < messageSize; i++) {
+	do {
 		message[i] = receiveLetter();
-	}
+	} while (++i < messageSize);
 
 	message[i - 1] = '\0';
 
