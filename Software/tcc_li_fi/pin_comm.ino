@@ -73,12 +73,7 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
 
 	unsigned char i;
 
-	Serial.println("pin_comm.ino sendPhrase: sending sync message");
-
 	sendSyncMessage();
-
-	Serial.println("pin_comm.ino sendPhrase: sync message sent");
-	Serial.println("pin_comm.ino sendPhrase: sending phrase");
 
 	i = micros();
 	while (micros() < i + 1000) {
@@ -90,8 +85,6 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
 	}
 
 	sendLetter('\0');
-
-	Serial.println("pin_comm.ino sendPhrase: phrase sent");
 }
 
 unsigned int receive10b() {
@@ -138,8 +131,6 @@ void receivePhrase(unsigned char * message, unsigned char messageSize) {
 
 	unsigned char i = 0;
 
-	Serial.println("pin_comm.ino receivePhrase: fired");
-
 	waitSyncMessage();
 
 	do {
@@ -147,8 +138,6 @@ void receivePhrase(unsigned char * message, unsigned char messageSize) {
 	} while (++i < messageSize);
 
 	message[i - 1] = '\0';
-
-	Serial.println("pin_comm.ino receivePhrase: returning phrase");
 }
 
 void startTimer(Tc *tc, uint32_t channel, IRQn_Type irq, uint32_t frequency) {
