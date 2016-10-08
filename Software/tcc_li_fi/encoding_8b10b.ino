@@ -1,9 +1,11 @@
 #include "encoding_8b10b.h"
 
-void setup8B10B() {
+void setEncodingRD(char rdValue) {
+	rd = rdValue;
+}
 
-	// rd must be always initilized as negative
-	rd = -1;
+void setup8B10B() {
+	setEncodingRD(INITIAL_RD_VALUE);
 }
 
 unsigned int encode8B10B(unsigned char data) {
@@ -900,7 +902,7 @@ unsigned int encode8B10B(unsigned char data) {
 			return (rd < 0 ? 689u : 334u);
 			break;
 		default:
-			return 0x3FF; // 10-bit integer: 0011 1111 1111
+			return 0u;
 			break;
 	}
 }
@@ -1863,5 +1865,111 @@ unsigned char decode8B10B(unsigned int data) {
 		default:
 			return 0u;
 			break;
+	}
+}
+
+unsigned int encode10bControl(unsigned int controlNumber) {
+
+	switch (controlNumber) {
+		case 28u:
+			return (rd < 0 ? 244u : 779u);
+			break;
+		case 60u:
+			rd *= -1;
+			return (rd > 0 ? 249u : 774u);
+			break;
+		case 92u:
+			rd *= -1;
+			return (rd > 0 ? 245u : 778u);
+			break;
+		case 124u:
+			rd *= -1;
+			return (rd > 0 ? 243u : 780u);
+			break;
+		case 156u:
+			return (rd < 0 ? 242u : 781u);
+			break;
+		case 188u:
+			rd *= -1;
+			return (rd > 0 ? 250u : 773u);
+			break;
+		case 220u:
+			rd *= -1;
+			return (rd > 0 ? 246u : 777u);
+			break;
+		case 252u:
+			return (rd < 0 ? 248u : 775u);
+			break;
+		case 247u:
+			return (rd < 0 ? 936u : 87u);
+			break;
+		case 251u:
+			return (rd < 0 ? 872u : 151u);
+			break;
+		case 253u:
+			return (rd < 0 ? 744u : 279u);
+			break;
+		case 254u:
+			return (rd < 0 ? 488u : 535u);
+			break;
+		default:
+			return 0u;
+			break;
+	}
+}
+
+unsigned int decode10bControl(unsigned int encodedControl) {
+
+	switch (encodedControl) {
+		case 244u:
+		case 779u:
+			return 28u;
+			break;
+		case 249u:
+		case 774u:
+			return 60u;
+			break;
+		case 245u:
+		case 778u:
+			return 92u;
+			break;
+		case 243u:
+		case 780u:
+			return 124u;
+			break;
+		case 242u:
+		case 781u:
+			return 156u;
+			break;
+		case 250u:
+		case 773u:
+			return 188u;
+			break;
+		case 246u:
+		case 777u:
+			return 220u;
+			break;
+		case 248u:
+		case 775u:
+			return 252u;
+			break;
+		case 936u:
+		case 87u:
+			return 247u;
+			break;
+		case 872u:
+		case 151u:
+			return 251u;
+			break;
+		case 744u:
+		case 279u:
+			return 253u;
+			break;
+		case 488u:
+		case 535u:
+			return 254u;
+			break;
+		default:
+			return 0u;
 	}
 }
