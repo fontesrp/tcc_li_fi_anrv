@@ -18,7 +18,7 @@ void sendPhrase(unsigned char * message, unsigned char messageSize);
 char boardRole;
 
 // Comm messages
-unsigned char sendMessage[MESSAGE_SIZE] = "Testing Arduino comm";
-unsigned char receivedMessage[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+unsigned char outputMessage[MESSAGE_SIZE] = "Testing Arduino comm";
+unsigned char inputMessage[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
 #endif

@@ -9,16 +9,18 @@ void setup() {
 
 void loop() {
 
-	unsigned char * message = sendMessage, check = 0;
+	unsigned char * message = outputMessage, check = 0;
 	int i;
 
 	Serial.println("main: fired");
 
 	if (boardRole == SENDER) {
+		Serial.println("main: boardRole = SENDER");
 		sendPhrase(message, MESSAGE_SIZE);
 		Serial.println("main: message sent");
 	} else if (boardRole == RECEIVER) {
-		message = receivedMessage;
+		Serial.println("main: boardRole = RECEIVER");
+		message = inputMessage;
 		receivePhrase(message, MESSAGE_SIZE);
 		Serial.println("main: message received");
 	} else {
@@ -30,7 +32,7 @@ void loop() {
 	for (i = 0; i < MESSAGE_SIZE; i++) {
 		Serial.print(" 0x");
 		Serial.print(message[i], HEX);
-		if (message[i] != '\0' && message[i] == sendMessage[i]) {
+		if (message[i] != '\0' && message[i] == outputMessage[i]) {
 			check++;
 		}
 	}
