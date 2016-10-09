@@ -11,7 +11,7 @@ void TC3_Handler() {
 	}
 }
 
-unsigned long generateSetBitData(unsigned char bitQtt) {
+static unsigned long generateSetBitData(unsigned char bitQtt) {
 
 	// For bitQtt = 30, should return the 30-bit integer 1073741823 = 0x3FFFFFFF = 0011 1111 1111 1111 1111 1111 1111 1111
 
@@ -28,7 +28,7 @@ unsigned long generateSetBitData(unsigned char bitQtt) {
 	return data;
 }
 
-void send10b(unsigned int data, unsigned char bits) {
+static void send10b(unsigned int data, unsigned char bits) {
 
 	unsigned int converter = 1u;
 
@@ -43,7 +43,7 @@ void send10b(unsigned int data, unsigned char bits) {
 	}
 }
 
-void sendLetter(unsigned char letter) {
+static void sendLetter(unsigned char letter) {
 
 	unsigned int encodedLetter;
 
@@ -52,7 +52,7 @@ void sendLetter(unsigned char letter) {
 	send10b(encodedLetter, DATA_BIT_SIZE + VALIDATION_HEADER_BIT_SIZE);
 }
 
-void sendSyncMessage() {
+static void sendSyncMessage() {
 
 	unsigned char len;
 	unsigned int data;
@@ -87,7 +87,7 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
 	sendLetter('\0');
 }
 
-unsigned int receive10b() {
+static unsigned int receive10b() {
 
 	unsigned char i;
 	unsigned int data = 0u, header = 0u, converter = 0xFC00u;
@@ -104,7 +104,7 @@ unsigned int receive10b() {
 	return data & 0x3FFu;
 }
 
-unsigned char receiveLetter() {
+static unsigned char receiveLetter() {
 
 	unsigned int encodedLetter;
 
@@ -112,7 +112,7 @@ unsigned char receiveLetter() {
 	return decode8B10B(encodedLetter);
 }
 
-void waitSyncMessage() {
+static void waitSyncMessage() {
 
 	unsigned long converter, data = 0u;
 
@@ -140,7 +140,7 @@ void receivePhrase(unsigned char * message, unsigned char messageSize) {
 	message[i - 1] = '\0';
 }
 
-void startTimer(Tc *tc, uint32_t channel, IRQn_Type irq, uint32_t frequency) {
+static void startTimer(Tc *tc, uint32_t channel, IRQn_Type irq, uint32_t frequency) {
 
 	// Parameters: Pointer to Timer Clock, TC's channel, the IRQ for that channel and the desired frequency in Hz
 
@@ -160,7 +160,7 @@ void startTimer(Tc *tc, uint32_t channel, IRQn_Type irq, uint32_t frequency) {
 	NVIC_EnableIRQ(irq);
 }
 
-void generateSyncMessage() {
+static void generateSyncMessage() {
 
 	unsigned char i, len;
 
