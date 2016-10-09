@@ -2,7 +2,7 @@
 #define tcc_li_fi_h
 
 // Comm messages have a fixed size
-#define MESSAGE_SIZE 21
+#define MESSAGE_SIZE 33
 
 // Board's role defined by hardware
 #define ROLE_PIN 24
@@ -14,11 +14,17 @@ void setupPinComm();
 void receivePhrase(unsigned char * message, unsigned char messageSize);
 void sendPhrase(unsigned char * message, unsigned char messageSize);
 
-// Sender or receiver
-char boardRole;
+// From btn_display.ino
+void displayTextMessage(unsigned char * message, unsigned char messageSize);
+void translateDisplayMessage(unsigned char * message, unsigned char messageSize);
+void enableDisplayControl();
+void setupDisplay(boolean showDefaultMessage);
 
-// Comm messages
-unsigned char outputMessage[MESSAGE_SIZE] = "Testing Arduino comm";
-unsigned char inputMessage[MESSAGE_SIZE] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+
+// Sender or receiver
+static char boardRole;
+
+// Comm message
+static unsigned char message[MESSAGE_SIZE];
 
 #endif

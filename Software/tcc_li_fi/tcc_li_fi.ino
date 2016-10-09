@@ -1,33 +1,43 @@
 #include "tcc_li_fi.h"
 
+void initMessage() {
+	int i;
+	for (i = 0; i < MESSAGE_SIZE; i++) {
+		message[i] = '\0';
+	}
+}
+
 void setup() {
 	Serial.begin(9600);
 	pinMode(ROLE_PIN, INPUT);
 	boardRole = digitalRead(ROLE_PIN);
+	initMessage();
 	setupPinComm();
+	setupDisplay(boardRole);
 }
 
 void loop() {
 
-	unsigned char * message = outputMessage, check = 0;
-	int i;
+	// int i, check = 0;
 
-	Serial.println("main: fired");
+	Serial.println("loop: fired");
 
 	if (boardRole == SENDER) {
-		Serial.println("main: boardRole = SENDER");
+		Serial.println("loop: boardRole = SENDER");
+		enableDisplayControl();
+		translateDisplayMessage(message, MESSAGE_SIZE);
 		sendPhrase(message, MESSAGE_SIZE);
-		Serial.println("main: message sent");
+		Serial.println("loop: message sent");
 	} else if (boardRole == RECEIVER) {
-		Serial.println("main: boardRole = RECEIVER");
-		message = inputMessage;
+		Serial.println("loop: boardRole = RECEIVER");
 		receivePhrase(message, MESSAGE_SIZE);
-		Serial.println("main: message received");
+		displayTextMessage(message, MESSAGE_SIZE);
+		Serial.println("loop: message received");
 	} else {
-		Serial.println("[error] main: invalid boardRole");
+		Serial.println("[error] loop: invalid boardRole");
 	}
 
-	Serial.print("main: message =");
+	/*Serial.print("loop: message =");
 
 	for (i = 0; i < MESSAGE_SIZE; i++) {
 		Serial.print(" 0x");
@@ -44,5 +54,5 @@ void loop() {
 		Serial.print(check, DEC);
 		Serial.print(" correct letters");
 		Serial.println("");
-	}
+	}*/
 }
