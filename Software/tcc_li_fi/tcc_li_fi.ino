@@ -1,47 +1,47 @@
 #include "tcc_li_fi.h"
 
 void initMessage() {
-	int i;
-	for (i = 0; i < MESSAGE_SIZE; i++) {
-		message[i] = '\0';
-	}
+    int i;
+    for (i = 0; i < MESSAGE_SIZE; i++) {
+        message[i] = '\0';
+    }
 }
 
 void setup() {
-	Serial.begin(9600);
-	pinMode(ROLE_PIN, INPUT);
-	boardRole = digitalRead(ROLE_PIN);
-	initMessage();
-	setupPinComm();
-	setupDisplay(boardRole);
+    Serial.begin(9600);
+    pinMode(ROLE_PIN, INPUT);
+    boardRole = digitalRead(ROLE_PIN);
+    initMessage();
+    setupPinComm();
+    setupDisplay(boardRole);
 }
 
 void loop() {
 
-	Serial.println("loop: fired");
+    Serial.println("loop: fired");
 
-	if (boardRole == SENDER) {
+    if (boardRole == SENDER) {
 
-		Serial.println("loop: boardRole = SENDER");
+        Serial.println("loop: boardRole = SENDER");
 
-		enableDisplayControl();
-		translateDisplayMessage(message, MESSAGE_SIZE);
-		sendPhrase(message, MESSAGE_SIZE);
+        enableDisplayControl();
+        translateDisplayMessage(message, MESSAGE_SIZE);
+        sendPhrase(message, MESSAGE_SIZE);
 
-		Serial.println("loop: message sent");
+        Serial.println("loop: message sent");
 
-	} else if (boardRole == RECEIVER) {
+    } else if (boardRole == RECEIVER) {
 
-		Serial.println("loop: boardRole = RECEIVER");
+        Serial.println("loop: boardRole = RECEIVER");
 
-		receivePhrase(message, MESSAGE_SIZE);
-		displayTextMessage(message, MESSAGE_SIZE);
+        receivePhrase(message, MESSAGE_SIZE);
+        displayTextMessage(message, MESSAGE_SIZE);
 
-		Serial.println("loop: message received");
+        Serial.println("loop: message received");
 
-	} else {
+    } else {
 
-		Serial.println("[error] loop: invalid boardRole");
+        Serial.println("[error] loop: invalid boardRole");
 
-	}
+    }
 }
