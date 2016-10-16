@@ -125,11 +125,13 @@ static void controlMessage() {
 
     if (millis() > lastCommand + EDIT_BLINK_DEBOUNCE) {
         lcd.clear();
-        delay(BTN_DEBOUNCE);
+        displayCleared = millis();
     }
 
-    updateMessage(currentLetter);
-    updateCursor();
+    if (millis() > displayCleared + BTN_DEBOUNCE) {
+        updateMessage(currentLetter);
+        updateCursor();
+    }
 }
 
 static void loadDefaultMessage() {
@@ -187,10 +189,15 @@ void enableDisplayControl() {
         controlCursor();
     }
 
-    lcd.cursor();
-    delay(BTN_DEBOUNCE);
-    lcd.noCursor();
-    delay(BTN_DEBOUNCE);
+    if (millis() > cursorHidden + BTN_DEBOUNCE) {
+        lcd.cursor();
+        cursorShown = millis();
+    }
+
+    if (millis() > cursorShown + BTN_DEBOUNCE) {
+        lcd.noCursor();
+        cursorHidden = millis();
+    }
 }
 
 void setupDisplay(boolean showDefaultMessage) {
