@@ -11,17 +11,21 @@ void TC3_Handler() {
     }
 }
 
+static void sendBit(unsigned char bit) {
+    commPinState = !(bit == false);
+    sendBitReady = true;
+    while (sendBitReady) {
+        ;
+    }
+}
+
 static void send10b(uint16_t data, unsigned char bits) {
 
     uint16_t converter = 1u;
 
     // loop initializes converter as (0010 0000 0000)2 when bits = 10
     for (converter <<= (bits - 1); converter; converter >>= 1) {
-        commPinState = data & converter;
-        sendBitReady = true;
-        while (sendBitReady) {
-            ;
-        }
+        sendBit(data & converter);
     }
 }
 
@@ -40,7 +44,7 @@ static uint32_t generateSetBitData(unsigned char bitQtt) {
     uint32_t data = 0u;
 
     for (; bitQtt > 3; bitQtt -= 4) {
-        data = (data << 4) | 0xF;
+        data = (data << 4) | 0xFu;
     }
 
     for (; bitQtt; bitQtt--) {
@@ -85,21 +89,25 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
     sendLetter('\0');
 }
 
+static unsigned char receiveBit() {
+    receiveBitReady = true;
+    while (receiveBitReady) {
+        ;
+    }
+    return (commPinState ? 1u : 0u);
+}
+
 static uint16_t receive10b() {
 
     unsigned char i;
-    uint16_t data = 0u, header = 0u, converter = 0xFC00u;
+    uint16_t data = 0u, header = 0u;
 
     while (header != validDataHeader) {
-        receiveBitReady = true;
-        while (receiveBitReady) {
-            ;
-        }
-        data = (data << 1) | (commPinState ? 1u : 0u);
-        header = data & converter;
+        data = (data << 1) | receiveBit();
+        header = data & dataHeaderIsolator;
     }
 
-    return data & 0x3FFu;
+    return data & dataHeaderRemover;
 }
 
 static unsigned char receiveLetter() {
@@ -117,11 +125,7 @@ static void waitSyncMessage() {
     converter = generateSetBitData(SYNC_MESSAGE_BIT_SIZE);
 
     while (data != syncMessage) {
-        receiveBitReady = true;
-        while (receiveBitReady) {
-            ;
-        }
-        data = ((data << 1) | (commPinState == LOW ? 0u : 1u)) & converter;
+        data = ((data << 1) | receiveBit()) & converter;
     }
 }
 
