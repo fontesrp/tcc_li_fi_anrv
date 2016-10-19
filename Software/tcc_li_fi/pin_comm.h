@@ -15,16 +15,16 @@
 
 // From encoding_8b10b.ino
 void setup8B10B();
-unsigned int encode8B10B(unsigned char data);
-unsigned char decode8B10B(unsigned int data);
+uint16_t encode8B10B(unsigned char data);
+unsigned char decode8B10B(uint16_t data);
 
 // Using interrupts
 volatile boolean sendBitReady = false, receiveBitReady = false, commPinState = false;
 
 // Extended ASCII codes for omega, dash and start of text
 static const unsigned char syncChars[3] = {234u, 45u, 2u}; // 0xEA, 0x2D, 0x02 = Ohm, '-', STX (Coded message is: 0x15E, 0x2C9, 0x12B)
-static unsigned long syncMessage; // 0x15EB252B = 0001 0101 1110 1011 0010 0101 0010 1011
+static uint32_t syncMessage; // 0x15EB252B = 0001 0101 1110 1011 0010 0101 0010 1011
 
-static const unsigned int validDataHeader = 0xA800u; // 0x2A = 0010 1010
+static const uint16_t validDataHeader = 0xA800u; // 0x2A = 0010 1010
 
 #endif

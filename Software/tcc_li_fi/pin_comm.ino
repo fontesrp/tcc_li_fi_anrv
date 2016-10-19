@@ -11,11 +11,33 @@ void TC3_Handler() {
     }
 }
 
-static unsigned long generateSetBitData(unsigned char bitQtt) {
+static void send10b(uint16_t data, unsigned char bits) {
+
+    uint16_t converter = 1u;
+
+    // loop initializes converter as (0010 0000 0000)2 when bits = 10
+    for (converter <<= (bits - 1); converter; converter >>= 1) {
+        commPinState = data & converter;
+        sendBitReady = true;
+        while (sendBitReady) {
+            ;
+        }
+    }
+}
+
+static void sendLetter(unsigned char letter) {
+
+    uint16_t encodedLetter;
+
+    encodedLetter = encode8B10B(letter);
+    encodedLetter |= validDataHeader;
+    send10b(encodedLetter, DATA_BIT_SIZE + VALIDATION_HEADER_BIT_SIZE);
+}
+
+static uint32_t generateSetBitData(unsigned char bitQtt) {
 
     // For bitQtt = 30, should return the 30-bit integer 1073741823 = 0x3FFFFFFF = 0011 1111 1111 1111 1111 1111 1111 1111
-
-    unsigned long data = 0u;
+    uint32_t data = 0u;
 
     for (; bitQtt > 3; bitQtt -= 4) {
         data = (data << 4) | 0xF;
@@ -28,35 +50,11 @@ static unsigned long generateSetBitData(unsigned char bitQtt) {
     return data;
 }
 
-static void send10b(unsigned int data, unsigned char bits) {
-
-    unsigned int converter = 1u;
-
-    // loop starts converter as (10 0000 0000)
-
-    for (converter <<= (bits - 1); converter; converter >>= 1) {
-        commPinState = data & converter;
-        sendBitReady = true;
-        while (sendBitReady) {
-            ;
-        }
-    }
-}
-
-static void sendLetter(unsigned char letter) {
-
-    unsigned int encodedLetter;
-
-    encodedLetter = encode8B10B(letter);
-    encodedLetter |= validDataHeader;
-    send10b(encodedLetter, DATA_BIT_SIZE + VALIDATION_HEADER_BIT_SIZE);
-}
-
 static void sendSyncMessage() {
 
     unsigned char len;
-    unsigned int data;
-    unsigned long converter;
+    uint16_t data;
+    uint32_t converter;
 
     len = sizeof(syncChars) / sizeof(syncChars[0]);
     converter = generateSetBitData(DATA_BIT_SIZE);
@@ -71,7 +69,7 @@ static void sendSyncMessage() {
 
 void sendPhrase(unsigned char * message, unsigned char messageSize) {
 
-    unsigned char i;
+    unsigned long i;
 
     sendSyncMessage();
 
@@ -87,10 +85,10 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
     sendLetter('\0');
 }
 
-static unsigned int receive10b() {
+static uint16_t receive10b() {
 
     unsigned char i;
-    unsigned int data = 0u, header = 0u, converter = 0xFC00u;
+    uint16_t data = 0u, header = 0u, converter = 0xFC00u;
 
     while (header != validDataHeader) {
         receiveBitReady = true;
@@ -106,7 +104,7 @@ static unsigned int receive10b() {
 
 static unsigned char receiveLetter() {
 
-    unsigned int encodedLetter;
+    uint16_t encodedLetter;
 
     encodedLetter = receive10b();
     return decode8B10B(encodedLetter);
@@ -114,7 +112,7 @@ static unsigned char receiveLetter() {
 
 static void waitSyncMessage() {
 
-    unsigned long converter, data = 0u;
+    uint32_t converter, data = 0u;
 
     converter = generateSetBitData(SYNC_MESSAGE_BIT_SIZE);
 

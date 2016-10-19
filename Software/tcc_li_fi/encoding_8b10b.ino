@@ -1,6 +1,6 @@
 #include "encoding_8b10b.h"
 
-void setEncodingRD(char rdValue) {
+void setEncodingRD(signed char rdValue) {
     rd = rdValue;
 }
 
@@ -8,7 +8,7 @@ void setup8B10B() {
     setEncodingRD(INITIAL_RD_VALUE);
 }
 
-unsigned int encode8B10B(unsigned char data) {
+uint16_t encode8B10B(unsigned char data) {
 
     switch (data) {
     case 0u:
@@ -907,7 +907,7 @@ unsigned int encode8B10B(unsigned char data) {
     }
 }
 
-unsigned char decode8B10B(unsigned int data) {
+unsigned char decode8B10B(uint16_t data) {
 
     switch (data) {
     case 628u:
@@ -1868,7 +1868,7 @@ unsigned char decode8B10B(unsigned int data) {
     }
 }
 
-unsigned int encode10bControl(unsigned int controlNumber) {
+uint16_t encode10bControl(uint16_t controlNumber) {
 
     switch (controlNumber) {
     case 28u:
@@ -1918,7 +1918,7 @@ unsigned int encode10bControl(unsigned int controlNumber) {
     }
 }
 
-unsigned int decode10bControl(unsigned int encodedControl) {
+uint16_t decode10bControl(uint16_t encodedControl) {
 
     switch (encodedControl) {
     case 244u:
