@@ -11,8 +11,8 @@ void TC3_Handler() {
     }
 }
 
-static void sendBit(unsigned char bit) {
-    commPinState = !(bit == false);
+static inline void sendBit(unsigned char bit) {
+    commPinState = (bit != 0u);
     sendBitReady = true;
     while (sendBitReady) {
         ;
@@ -89,7 +89,7 @@ void sendPhrase(unsigned char * message, unsigned char messageSize) {
     sendLetter('\0');
 }
 
-static unsigned char receiveBit() {
+static inline unsigned char receiveBit() {
     receiveBitReady = true;
     while (receiveBitReady) {
         ;

@@ -14,9 +14,9 @@
 #define COMM_BIT_RATE 1000u
 
 // From encoding_8b10b.ino
-void setup8B10B();
-uint16_t encode8B10B(unsigned char data);
-unsigned char decode8B10B(uint16_t data);
+extern void setup8B10B();
+extern uint16_t encode8B10B(unsigned char data);
+extern unsigned char decode8B10B(uint16_t data);
 
 // Using interrupts
 volatile boolean sendBitReady = false, receiveBitReady = false, commPinState = false;

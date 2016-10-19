@@ -10,15 +10,15 @@
 #define RECEIVER LOW
 
 // From pin_comm.ino
-void setupPinComm();
-void receivePhrase(unsigned char * message, unsigned char messageSize);
-void sendPhrase(unsigned char * message, unsigned char messageSize);
+extern void setupPinComm();
+extern void receivePhrase(unsigned char * message, unsigned char messageSize);
+extern void sendPhrase(unsigned char * message, unsigned char messageSize);
 
 // From btn_display.ino
-void displayTextMessage(unsigned char * message, unsigned char messageSize);
-void translateDisplayMessage(unsigned char * message, unsigned char messageSize);
-void enableDisplayControl();
-void setupDisplay(boolean showDefaultMessage);
+extern void displayTextMessage(unsigned char * message, unsigned char messageSize);
+extern void translateDisplayMessage(unsigned char * message, unsigned char messageSize);
+extern void enableDisplayControl();
+extern void setupDisplay(boolean showDefaultMessage);
 
 
 // Sender or receiver
